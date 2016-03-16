@@ -1,1 +1,3 @@
-var AddMyBag = angular.module("mohApp", ['ngRoute']);
+var AddMyBag = angular.module("AddMyBag", ['ngRoute']);
+
+   
