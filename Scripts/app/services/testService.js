@@ -5,10 +5,11 @@
     var testService = function ($http, $location) {
         var factory = {};
 
-        factory.LoadLactatingMotherCare = function () {
-            return $location.url('/CiLactatingMother');
+        factory.testFunction = function () {
+            return $http.post('/index.php/Welcome/testfunction');
         };
-        testService.$inject = ["$http", "$location"];
-        AddMyBag.factory("testService", testService);
+        return factory;    
     }
+    testService.$inject = ["$http", "$location"];
+    AddMyBag.factory("testService", testService);
 })();

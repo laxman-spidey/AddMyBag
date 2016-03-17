@@ -1,20 +1,20 @@
 "use strict";
 (function () {
-    var testController = function ($scope, $rootScope,$timeout, $http, $location) {
+    var testController = function ($scope, $rootScope,$timeout,testService) {
         var base_url = window.location.origin;
         $scope.testVar = "testing testing testing";
         $timeout(function() {
             $scope.testVar = "after some timeout";
         }, 100);
-        $http({url:  base_url+'/index.php/Welcome/testFunction', method: "post"}).success(function (response) {        
+        testService.testFunction().success(function (response) {
+            $scope.testVar = response.testString;
             console.log(response);
-            $scope.testVar = response.testString;  
         });
         
     };
 
 
-    testController.$inject = ["$scope","$rootScope","$timeout","$http","$location"];
+    testController.$inject = ["$scope","$rootScope","$timeout","testService"];
     AddMyBag.controller("testController",testController);
     
 })();
