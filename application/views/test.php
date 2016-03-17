@@ -10,5 +10,7 @@
     </head>
     <body ng-controller="testController">
         {{testVar}}
+        <br/>
+        <?php echo base_url("index.php/admin/do_search"); ?>
     </body>
 </html>

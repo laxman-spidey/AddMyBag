@@ -26,6 +26,6 @@ class Welcome extends CI_Controller {
 	public function testFunction()
 	{
 		$string = '{"testString" : "value"}';
-		return $string;
+		echo $string;
 	}
 }

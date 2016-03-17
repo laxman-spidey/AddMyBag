@@ -6,7 +6,8 @@
         $timeout(function() {
             $scope.testVar = "after some timeout";
         }, 100);
-        $http({url:  base_url+'/Welcome/testFunction', method: "post"}).success(function (response) {        
+        $http({url:  base_url+'/index.php/Welcome/testFunction', method: "post"}).success(function (response) {        
+            console.log(response);
             $scope.testVar = response.testString;  
         });
         
