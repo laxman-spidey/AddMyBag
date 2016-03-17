@@ -23,4 +23,9 @@ class Welcome extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->view('test');
 	}
+	public function testFunction()
+	{
+		$string = '{"testString" : "value"}';
+		echo $string;
+	}
 }
