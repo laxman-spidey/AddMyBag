@@ -72,7 +72,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             $rootScope.$broadcast("event:LoginModuleLoaded");
             registerSwitchForms();
         });
-
+        
 
         var registerSwitchForms = function()
         {
@@ -93,8 +93,12 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     AuthModule.controller("AuthController",AuthController);
 
 
-    //AuthService definition
-
+    /*************************************************************************
+     * 
+     * Application Authentication Service.
+     * This connects to the AddMyBag Application server.
+     *
+     * ***********************************************************************/
     var AuthService = function($http, User) {
         var factory = {};
 
@@ -104,18 +108,14 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 .success(function(data, status, headers, config) {
                     console.log(data);
                     if (data.status) {
-                        // succefull login
-                        User.isLogged = true;
-                        User.username = data.username;
+                        User.login(data.username,'',User.LOGIN_VIA_APP);
                     }
                     else {
-                        User.isLogged = false;
-                        User.username = '';
+                        User.logout();
                     }
                 })
                 .error(function(data, status, headers, config) {
-                    User.isLogged = false;
-                    User.username = '';
+                    User.logout();
                 });
         };
 
@@ -124,6 +124,13 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     AuthService.$inject = ["$http","UserService"];
     AuthModule.service("AuthService",AuthService);
 
+    /*************************************************************************
+     * 
+     * Facebook Authentication Service.
+     * Source: http://blog.brunoscopelliti.com/facebook-authentication-in-your-angularjs-web-app/
+     *
+     * ***********************************************************************/
+     
     var FbAuthService = function(UserService)
     {
         var factory = {};
@@ -139,38 +146,83 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         factory.getUserInfo = function(){
             FB.api('/me', function(response) {
 
-                UserService.username = response;
-                /*
+                UserService.login(response,'',UserService.LOGIN_VIA_FB);
+                /* copied from source
                 $rootScope.$apply(function() {
                     $rootScope.user = _self.user = res;
                 });
                 */
             });
         };
-
+        
+        factory.logout = function() {
+            FB.logout(function(response) {
+                
+                UserService.logout();
+                /* copied from source
+                $rootScope.$apply(function() { 
+                    $rootScope.user = _self.user = {}; 
+                }); 
+                */
+            });
+        }
         return factory;
+    };
+    
+    FbAuthService.$inject = ["$http","UserService"];
+    AuthModule.service("FbAuthService",FbAuthService);
 
-    }
 
-
-
-
+    
+    /*************************************************************************
+     * 
+     * User Service which acts as model to user data or session. 
+     * This service is used accross the app to detect if the user is logged in or not.
+     * And also this object used to provide security during routing.
+     *
+     * ***********************************************************************/
     //Definition of user service function
     var UserService = function() {
         var user = {
             isLogged: false,
-            username: ''
+            username: '',
+            loggedVia: 0
+        };
+        //constants
+        user.LOGIN_VIA_APP = 1;
+        user.LOGIN_VIA_FB = 2;
+        user.LOGIN_VIA_GOOGLE = 3;
+        
+        
+        user.login = function(username,webToken,loggedVia) {
+            user.isLogged = true;
+            user.username = username;
+            user.loggedVia = loggedVia;
+        };
+        user.logout = function() {
+            user.isLogged = false;
+            user.username = '';
+            user.loggedVia = 0;
         };
         return user;
     };
 
-    // Provider for the user session information
-    //This shares the service to the other modules
+    /*************************************************************************
+     * 
+     * This is provider for the entire module.
+     * This provider exposes UserService to the outer world (out of AuthModule).
+     *
+     * ***********************************************************************/
     AuthModule.config(function ($provide) {
         $provide.service("UserService", UserService)
     });
 
-    // Configuration options and routing fr authorization module
+    /*************************************************************************
+     * 
+     * Configuring the application route to bring  login partial view from the 
+     * server whenever required. This is not working in this revision
+     *
+     * ***********************************************************************/
     AuthModule.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {
         templateUrl: 'index.php/Welcome/LoginPartial',
