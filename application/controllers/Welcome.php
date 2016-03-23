@@ -28,4 +28,20 @@ class Welcome extends CI_Controller {
 		$string = '{"testString" : "value"}';
 		echo $string;
 	}
+	public function Login()
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$username = $request->username;
+		//var_dump($username);
+		$arrayName = array(	'success' => 'true',
+							'username' => $username );
+		$string = json_encode($arrayName);
+		//var_dump($string);
+		echo $string;
+	}
+	public function LoginPartial()
+	{
+		$this->load->view('LoginPartial');
+	}
 }

@@ -17,4 +17,5 @@
     testController.$inject = ["$scope","$rootScope","$timeout","testService"];
     AddMyBag.controller("testController",testController);
     
+    
 })();
