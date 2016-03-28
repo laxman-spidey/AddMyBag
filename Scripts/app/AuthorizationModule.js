@@ -1,3 +1,4 @@
+
 "use strict";
 var AuthModule = angular.module("AuthModule", ['ngRoute']);
 (function () {
@@ -6,49 +7,15 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
 
     //Definition for Authorization Controller
 
-    var AuthController = function($scope, AuthService, $rootScope, $window ){
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService ){
 
-
-        var initializeFacebookAsyncTask = function()
-        {
-            $window.fbAsyncInit = function() {
-                FB.init({
-                    appId: '829664043829221',
-                    status: true,
-                    cookie: true,
-                    version: 'v2.5',
-                    xfbml: true
-
-                })
-            }
-        };
-        initializeFacebookAsyncTask();
-        (function(d){
-            // load the Facebook javascript SDK
-
-            var js,
-            id = 'facebook-jssdk',
-            ref = d.getElementsByTagName('script')[0];
-
-            if (d.getElementById(id)) {
-              return;
-            }
-
-            js = d.createElement('script');
-            js.id = id;
-            js.async = true;
-            js.src = "//connect.facebook.net/en_US/all.js";
-
-            ref.parentNode.insertBefore(js, ref);
-
-        }(document));
+        FbAuthService.initialize();
         // configuration object
         var config = {
             username : "dummy",
             password : "dummy"
         };
-
-
+        
         this.login = function(username,password)
         {
             var object = {
@@ -57,7 +24,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             };
             AuthService.login(object, callback);
         }
-
+        
         /*
         this.register(username,password,email,phone)
         {
@@ -89,7 +56,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             });
         }
     };
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window']
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService']
     AuthModule.controller("AuthController",AuthController);
 
 
@@ -118,6 +85,14 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                     User.logout();
                 });
         };
+        
+        factory.fbLogin = function(userdata,callback) {
+            return $http.post("index.php/Welcome/fbLogin", userdata)
+                .success(function(data, status, headers, config) {
+                    
+                });
+        };
+        
 
         return factory;
     };
@@ -131,28 +106,82 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      *
      * ***********************************************************************/
      
-    var FbAuthService = function(UserService)
+    var FbAuthService = function(UserService, $window)
     {
         var factory = {};
+        
+        factory.initialize = function()
+        {
+            loadSDK(document);
+            $window.fbAsyncInit = function() {
+                FB.init({
+                    //appId: '829664043829221', // production app
+                    appId: '832379756890983', // test app
+                    status: true,
+                    cookie: true,
+                    version: 'v2.5',
+                    channelUrl: 'index.php/welcome/channel',
+                    xfbml: true
 
+                });
+                factory.watchLoginChange();
+            };
+            
+        };
+        
+        //Load SDK from Facebook and create a fb signin button
+        var loadSDK = function(d) {
+            var js,
+            id = 'facebook-jssdk',
+            ref = d.getElementsByTagName('script')[0];
+
+            if (d.getElementById(id)) {
+              return;
+            }
+
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+
+            //insert fb login button
+            ref.parentNode.insertBefore(js, ref);
+        };
+        
+        //subscribe tp fb authentication system
         factory.watchLoginChange = function() {
-            FB.Event.subscribe('auth.authResponseChange', function(response) {
+            $window.FB.Event.subscribe('auth.authResponseChange', function(response) {
+                console.log(response);
                 if (response.status === 'connected') {
-
+                    UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
+                    //console.log(factory.getUserInfo());
+                    factory.getUserInfo();
+                }
+                else {
+                    UserService.logout();
                 }
             });
         };
 
         factory.getUserInfo = function(){
-            FB.api('/me', function(response) {
-
-                UserService.login(response,'',UserService.LOGIN_VIA_FB);
+            var userid;
+            FB.api('/me', 'get', {fields: 'id,name,gender,email' }, function(response) {
+                console.log(response);
+                userid = response.id;
+                console.log(userid);
+                return response;
                 /* copied from source
                 $rootScope.$apply(function() {
                     $rootScope.user = _self.user = res;
                 });
                 */
             });
+            
+            
+            FB.api('/me/permissions', function(response) {
+                console.log(response);
+            });
+            
         };
         
         factory.logout = function() {
@@ -169,10 +198,32 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         return factory;
     };
     
-    FbAuthService.$inject = ["$http","UserService"];
+    FbAuthService.$inject = ["UserService","$window"];
     AuthModule.service("FbAuthService",FbAuthService);
 
 
+    /*************************************************************************
+     * 
+     * Google Plus Authentication Service.
+     * Source: http://stackoverflow.com/questions/20809673/how-to-implement-google-sign-in-with-angularjs
+     *
+     * ***********************************************************************/
+     var GplusAuthService = function()
+     {
+         var factory = {};
+         factory.login = function() {
+             
+         };
+         
+         factory.logout = function() {
+             
+         };
+         
+         return factory;
+     }
+     
+     
+     
     
     /*************************************************************************
      * 
@@ -182,11 +233,15 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      *
      * ***********************************************************************/
     //Definition of user service function
-    var UserService = function() {
+    var UserService = function($http) {
         var user = {
             isLogged: false,
-            username: '',
-            loggedVia: 0
+            email: 'dummy',
+            password: '',
+            accessToken : '',
+            socialId: '12345',
+            loggedVia: 0,
+            userId: 0
         };
         //constants
         user.LOGIN_VIA_APP = 1;
@@ -197,12 +252,23 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         user.login = function(username,webToken,loggedVia) {
             user.isLogged = true;
             user.username = username;
+            user.accessToken = webToken;
             user.loggedVia = loggedVia;
+            console.log("user logged in : "+ webToken );
+            user.fbLogin();
+        };
+        user.fbLogin = function(){
+            return $http.post("index.php/Welcome/fbLogin", user)
+                .success(function(data, status, headers, config) {
+                    console.log(data);
+                });
         };
         user.logout = function() {
             user.isLogged = false;
             user.username = '';
+            user.accessToken = '';
             user.loggedVia = 0;
+            console.log("user logged out. ");
         };
         return user;
     };
@@ -217,6 +283,41 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         $provide.service("UserService", UserService)
     });
 
+    var ServerInterface = function($http)
+    {
+        var factory = {};
+        factory.register = function(email, password, firstName, lastName, phoneNumber)
+        {
+            var request = {
+                email : email,
+                password : password,
+                firstName : firstName,
+                lastName : lastName,
+                phoneNumber : phoneNumber,
+                gender : gender
+            } 
+            $http.post("index.php/Welcome/register", request)
+            .success(function(data, status, headers, config) {
+                if(headers.success == true)
+                {
+                    return data.userId;
+                }
+            });
+        }
+        factory.login = function(userdata)
+        {
+            $http.post("index.php/Welcome/Login",userdata)
+            .success(function(data, status, headers, config) {
+                if(headers.success == true)
+                {
+                    return data.userId;
+                }
+            });
+        }
+        
+    }
+    ServerInterface.$inject = ["$http"];
+    AuthModule.service("ServerInterface", ServerInterface);
     /*************************************************************************
      * 
      * Configuring the application route to bring  login partial view from the 
@@ -228,7 +329,6 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         templateUrl: 'index.php/Welcome/LoginPartial',
             controller: 'AuthController'
         });
-
 
         $routeProvider.otherwise({ redirectTo: '/main' });
     }]);
