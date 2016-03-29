@@ -8,7 +8,18 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     //Definition for Authorization Controller
 
     var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, UserService ){
-
+        
+        var RESPONSE_CODE = {
+            // login response codes
+            LOGIN_SUCCESS : 100,
+            EMAIL_DOES_NOT_EXISTS :101,
+            WRONG_PASSWORD : 102,
+            
+            //registration response codes
+            REGISTER_SUCCESS : 103,
+            EMAIL_ALREADY_TAKEN : 104
+        }
+        
         FbAuthService.initialize();
         // configuration object
         var config = {
@@ -19,7 +30,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         this.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');
-            UserService.register(email,password,firstName,lastName,phoneNumber)
+            UserService.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
             
         }
         this.login = function(username,password)
@@ -41,6 +52,20 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             registerSwitchForms();
         });
         
+        user.onResponseRecieved = function(response, responseCode)
+        {
+            if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
+            {
+                UserService.userId = response.userId;
+                //$scope.$broadcast('onSuccessfulLogin');
+                console.log("success");
+            }
+            else
+            {
+                //$scope.$broadcast('onFailure',{responseCode: responseCode});
+                console.log("failed: " + responseCode);
+            }
+        }
 
         var registerSwitchForms = function()
         {
@@ -235,7 +260,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      *
      * ***********************************************************************/
     //Definition of user service function
-    var UserService = function(ServerInterface, $scope) {
+    var UserService = function(ServerInterface) {
         var user = {
             isLogged: false,
             email: 'dummy',
@@ -251,19 +276,10 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         user.LOGIN_VIA_GOOGLE = 3;
         
         
-        user.RESPONSE_CODE = {
-            // login response codes
-            LOGIN_SUCCESS : 100,
-            EMAIL_DOES_NOT_EXISTS :101,
-            WRONG_PASSWORD : 102,
-            
-            //registration response codes
-            REGISTER_SUCCESS : 103,
-            EMAIL_ALREADY_TAKEN : 104
-        }
         
-        user.register = function(email,password,firstName,lastName,phoneNumber) {
-             ServerInterface.register(email,password,firstName,lastName,phoneNumber, user.RESPONSE_CODE, user.onResponseRecieved);
+        
+        user.register = function(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved) {
+             ServerInterface.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
         };
         
         user.login = function(username,webToken,loggedVia) {
@@ -282,20 +298,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             user.loggedVia = 0;
             console.log("user logged out. ");
         };
-        user.onResponseRecieved = function(response, responseCode)
-        {
-            if(responseCode == user.RESPONSE_CODE.LOGIN_SUCCESS || responseCode == user.RESPONSE_CODE.REGISTER_SUCCESS)
-            {
-                user.userId = response.userId;
-                //$scope.$broadcast('onSuccessfulLogin');
-                console.log("success");
-            }
-            else
-            {
-                //$scope.$broadcast('onFailure',{responseCode: responseCode});
-                console.log("failed: " + responseCode);
-            }
-        }
+        
         return user;
     };
     UserService.$inject = ["ServerInterface"];
