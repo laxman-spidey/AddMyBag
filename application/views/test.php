@@ -6,7 +6,7 @@
     <body ng-controller="testController">
         {{testVar}}
         
-        <div id="fb-root"> <fb:login-button show-faces="true" max-rows="1" size="large"></fb:login-button></div>
+        <div id="fb-root"> <fb:login-button scope="public_profile,email,user_friends" show-faces="true" max-rows="1" size="large"></fb:login-button></div>
         <br/>
         <?php echo base_url("index.php/admin/do_search"); ?>
         
@@ -22,6 +22,7 @@
     <script type="text/javascript" src="Scripts/plugins/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="Scripts/app/app.js"></script>
     <script type="text/javascript" src="Scripts/app/controllers/TestController.js"></script>
+    
     <script type="text/javascript" src="Scripts/app/AuthorizationModule.js"></script>
     <script type="text/javascript" src="Scripts/app/services/testService.js"></script>
         

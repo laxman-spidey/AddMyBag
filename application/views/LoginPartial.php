@@ -17,11 +17,12 @@
   <div class="form">
     <h2>Create an account</h2>
     <form>
-      <input type="text" placeholder="Username" ng-model="username"/>
-      <input type="password" placeholder="Password" ng-model="password"/>
-      <input type="email" placeholder="Email Address" ng-model="email"/>
-      <input type="tel" placeholder="Phone Number" ng-model="phonenumber"/>
-      <button ng-click="register(username,password,email,phonenumber)">Register</button>
+      <input type="text" placeholder="first name*" ng-model="firstName" value='laxman'/>
+      <input type="text" placeholder="last name*" ng-model="lastName" value='spidey'/>
+      <input type="email" placeholder="Email Address*" ng-model="email" value='mittu.thefire'/>
+      <input type="password" placeholder="Password*" ng-model="password" value='password'/>
+      <input type="tel" placeholder="Phone Number*" ng-model="phonenumber" value='1234567'/>
+      <button ng-click="ACntl.register(firstName,lastName,email,password,phonenumber)">Register</button>
     </form>
   </div>
   <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>

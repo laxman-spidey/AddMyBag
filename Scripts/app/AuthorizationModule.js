@@ -7,7 +7,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
 
     //Definition for Authorization Controller
 
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService ){
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, UserService ){
 
         FbAuthService.initialize();
         // configuration object
@@ -16,6 +16,12 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             password : "dummy"
         };
         
+        this.register = function(email,password,firstName,lastName,phoneNumber)
+        {
+            console.log('register');
+            UserService.register(email,password,firstName,lastName,phoneNumber)
+            
+        }
         this.login = function(username,password)
         {
             var object = {
@@ -25,12 +31,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             AuthService.login(object, callback);
         }
         
-        /*
-        this.register(username,password,email,phone)
-        {
-
-        }
-        */
+        
         var callback = function()
         {
             console.log("callback");
@@ -56,7 +57,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             });
         }
     };
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService']
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','UserService']
     AuthModule.controller("AuthController",AuthController);
 
 
@@ -155,7 +156,8 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 if (response.status === 'connected') {
                     UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
                     //console.log(factory.getUserInfo());
-                    factory.getUserInfo();
+                    var fbobject = factory.getUserInfo();
+                    UserService.login(fbobject)
                 }
                 else {
                     UserService.logout();
@@ -233,7 +235,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      *
      * ***********************************************************************/
     //Definition of user service function
-    var UserService = function($http) {
+    var UserService = function(ServerInterface, $scope) {
         var user = {
             isLogged: false,
             email: 'dummy',
@@ -249,30 +251,54 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         user.LOGIN_VIA_GOOGLE = 3;
         
         
+        user.RESPONSE_CODE = {
+            // login response codes
+            LOGIN_SUCCESS : 100,
+            EMAIL_DOES_NOT_EXISTS :101,
+            WRONG_PASSWORD : 102,
+            
+            //registration response codes
+            REGISTER_SUCCESS : 103,
+            EMAIL_ALREADY_TAKEN : 104
+        }
+        
+        user.register = function(email,password,firstName,lastName,phoneNumber) {
+             ServerInterface.register(email,password,firstName,lastName,phoneNumber, user.RESPONSE_CODE, user.onResponseRecieved);
+        };
+        
         user.login = function(username,webToken,loggedVia) {
             user.isLogged = true;
             user.username = username;
             user.accessToken = webToken;
             user.loggedVia = loggedVia;
             console.log("user logged in : "+ webToken );
-            user.fbLogin();
+            //user.fbLogin();
         };
-        user.fbLogin = function(){
-            return $http.post("index.php/Welcome/fbLogin", user)
-                .success(function(data, status, headers, config) {
-                    console.log(data);
-                });
-        };
+        
         user.logout = function() {
             user.isLogged = false;
-            user.username = '';
+            user.username = ''; 
             user.accessToken = '';
             user.loggedVia = 0;
             console.log("user logged out. ");
         };
+        user.onResponseRecieved = function(response, responseCode)
+        {
+            if(responseCode == user.RESPONSE_CODE.LOGIN_SUCCESS || responseCode == user.RESPONSE_CODE.REGISTER_SUCCESS)
+            {
+                user.userId = response.userId;
+                //$scope.$broadcast('onSuccessfulLogin');
+                console.log("success");
+            }
+            else
+            {
+                //$scope.$broadcast('onFailure',{responseCode: responseCode});
+                console.log("failed: " + responseCode);
+            }
+        }
         return user;
     };
-
+    UserService.$inject = ["ServerInterface"];
     /*************************************************************************
      * 
      * This is provider for the entire module.
@@ -286,7 +312,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     var ServerInterface = function($http)
     {
         var factory = {};
-        factory.register = function(email, password, firstName, lastName, phoneNumber)
+        factory.register = function(email, password, firstName, lastName, phoneNumber, responseCode, callback)
         {
             var request = {
                 email : email,
@@ -294,7 +320,8 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 firstName : firstName,
                 lastName : lastName,
                 phoneNumber : phoneNumber,
-                gender : gender
+                responseCode : responseCode
+                
             } 
             $http.post("index.php/Welcome/register", request)
             .success(function(data, status, headers, config) {
@@ -302,8 +329,9 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 {
                     return data.userId;
                 }
+                callback(data, data.responseCode);
             });
-        }
+        };
         factory.login = function(userdata)
         {
             $http.post("index.php/Welcome/Login",userdata)
@@ -313,7 +341,8 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                     return data.userId;
                 }
             });
-        }
+        };
+        return factory;
         
     }
     ServerInterface.$inject = ["$http"];

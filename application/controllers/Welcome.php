@@ -106,6 +106,38 @@ class Welcome extends CI_Controller {
 		
 		
 	}
+	public function register()
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$this->load->model('UserModel');
+		$response = array();
+		$data = array();
+		$userId = $this->UserModel->getUserIdIfExists($request->email);			
+		if($userId > -1)
+		{
+			$response['responseCode'] = $request->responseCode->EMAIL_ALREADY_TAKEN;
+		}
+		else {
+			$data['first_name'] = $request->firstName;
+			$data['last_name'] = $request->lastName;
+			$data['email'] = $request->email;
+			$data['password'] = $request->password;
+			if(isset($request->phoneNumber) && $request->phoneNumber == '')
+			{
+				$data['phone'] == $request->phoneNumber;
+			}
+			if(isset($request->gender) && $request->gender == '')
+			{
+				$data['gender'] == $request->gender;
+			}
+			$userId = $this->UserModel->insertUser($data);
+			$response['userId'] = $userId;
+			$response['responseCode'] = $request->responseCode.REGISTER_SUCCESS;
+		}
+		echo json_encode($response);
+	}
+	
 	public function LoginPartial()
 	{
 		$this->load->view('LoginPartial');
