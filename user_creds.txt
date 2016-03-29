@@ -1,0 +1,4 @@
+# AddMyBag
+
+       Root User: mittu-spidey
+   Database Name: c9phpmyadmin-ctl install
