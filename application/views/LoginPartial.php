@@ -7,9 +7,9 @@
   <div class="form">
     <h2>Login to your account</h2>
     <form>
-      <input type="text" placeholder="Username" ng-model="username"/>
-      <input type="password" placeholder="Password" ng-model="password"/>
-      <button ng-click="ACntl.login(username,password)">Login</button>
+      <input type="email" placeholder="email" ng-model="email" required/>
+      <input type="password" placeholder="Password" ng-model="password" required/>
+      <button ng-click="ACntl.login(email,password)">Login</button>
     </form>
     
   </div>
@@ -26,20 +26,7 @@
     </form>
   </div>
   <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>
-    <script type="text/javascript">
-      // Toggle Function
-        $('.toggle').click(function(){
-            // Switches the Icon
-            $(this).children('i').toggleClass('fa-pencil');
-            // Switches the forms  
-            $('.form').animate({
-                height: "toggle",
-                'padding-top': 'toggle',
-                'padding-bottom': 'toggle',
-                opacity: "toggle"
-            }, "slow");
-        });
-      </script>
+    
     <link rel="stylesheet" href="Styles/style.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
     

@@ -50,7 +50,20 @@ class UserModel extends CI_Model {
     }
     public function authenticateAppUser($email,$password)
     {
-        
+        $data = array('email' => $email, 'password' => $password );
+        $this->db->select('user_id')->from('user')
+            ->where('email',$email)
+            ->where('password',$password);
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $userid = $query->result();
+        }
+        else 
+        {
+            $userid = -1;
+        }
+        return $userid;
     }
     
 }

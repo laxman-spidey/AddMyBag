@@ -1,12 +1,8 @@
-
 "use strict";
 var AuthModule = angular.module("AuthModule", ['ngRoute']);
 (function () {
-
-
-
+    
     //Definition for Authorization Controller
-
     var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, UserService ){
         
         var RESPONSE_CODE = {
@@ -18,54 +14,46 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             //registration response codes
             REGISTER_SUCCESS : 103,
             EMAIL_ALREADY_TAKEN : 104
-        }
+        };
         
         FbAuthService.initialize();
-        // configuration object
-        var config = {
-            username : "dummy",
-            password : "dummy"
-        };
         
         this.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');
             UserService.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
             
-        }
-        this.login = function(username,password)
-        {
-            var object = {
-                  username : username,
-                  password : password
-            };
-            AuthService.login(object, callback);
-        }
+        };
         
+        this.login = function(email,password)
+        {
+            UserService.appLogin(email, password, RESPONSE_CODE, onResponseRecieved);
+        };
         
         var callback = function()
         {
             console.log("callback");
-        }
+        };
+        
         $scope.$on('$includeContentLoaded', function(event){
             $rootScope.$broadcast("event:LoginModuleLoaded");
             registerSwitchForms();
         });
         
-        user.onResponseRecieved = function(response, responseCode)
+        var onResponseRecieved = function(response, responseCode)
         {
             if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
             {
                 UserService.userId = response.userId;
                 //$scope.$broadcast('onSuccessfulLogin');
-                console.log("success");
+                console.log("success :"+ responseCode);
             }
             else
             {
                 //$scope.$broadcast('onFailure',{responseCode: responseCode});
                 console.log("failed: " + responseCode);
             }
-        }
+        };
 
         var registerSwitchForms = function()
         {
@@ -80,7 +68,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                     opacity: "toggle"
                 }, "slow");
             });
-        }
+        };
     };
     AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','UserService']
     AuthModule.controller("AuthController",AuthController);
@@ -279,7 +267,15 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         
         
         user.register = function(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved) {
-             ServerInterface.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
+            var request = {
+                email : email,
+                password : password,
+                firstName : firstName,
+                lastName : lastName,
+                phoneNumber : phoneNumber,
+                responseCode : RESPONSE_CODE
+            };
+             ServerInterface.register(request, onResponseRecieved);
         };
         
         user.login = function(username,webToken,loggedVia) {
@@ -290,6 +286,21 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             console.log("user logged in : "+ webToken );
             //user.fbLogin();
         };
+        user.appLogin = function(email, password, responseCode, onResponseRecieved)
+        {
+            var request = {
+                email : email,
+                password : password,
+                loggedVia : user.LOGIN_VIA_APP,
+                LOGIN_VIA_APP : user.LOGIN_VIA_APP,
+                LOGIN_VIA_FB : user.LOGIN_VIA_FB,
+                LOGIN_VIA_GOOGLE : user.LOGIN_VIA_GOOGLE,
+                responseCode : responseCode,
+                callback : onResponseRecieved
+            };
+            ServerInterface.login(request,onResponseRecieved);
+            
+        }
         
         user.logout = function() {
             user.isLogged = false;
@@ -315,34 +326,18 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     var ServerInterface = function($http)
     {
         var factory = {};
-        factory.register = function(email, password, firstName, lastName, phoneNumber, responseCode, callback)
+        factory.register = function(request, callback)
         {
-            var request = {
-                email : email,
-                password : password,
-                firstName : firstName,
-                lastName : lastName,
-                phoneNumber : phoneNumber,
-                responseCode : responseCode
-                
-            } 
-            $http.post("index.php/Welcome/register", request)
-            .success(function(data, status, headers, config) {
-                if(headers.success == true)
-                {
-                    return data.userId;
-                }
+            
+            $http.post("index.php/Welcome/register", request).success(function(data, status, headers, config) {
                 callback(data, data.responseCode);
             });
         };
-        factory.login = function(userdata)
+        factory.login = function(request, callback)
         {
-            $http.post("index.php/Welcome/Login",userdata)
+            $http.post("index.php/Welcome/Login",request)
             .success(function(data, status, headers, config) {
-                if(headers.success == true)
-                {
-                    return data.userId;
-                }
+                    callback(data);
             });
         };
         return factory;
