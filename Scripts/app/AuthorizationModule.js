@@ -328,8 +328,9 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         var factory = {};
         factory.register = function(request, callback)
         {
-            
+            console.log(request);
             $http.post("index.php/Welcome/register", request).success(function(data, status, headers, config) {
+                
                 callback(data, data.responseCode);
             });
         };

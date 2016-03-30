@@ -22,7 +22,7 @@
       <input type="email" placeholder="Email Address*" ng-model="email" value='mittu.thefire'/>
       <input type="password" placeholder="Password*" ng-model="password" value='password'/>
       <input type="tel" placeholder="Phone Number*" ng-model="phonenumber" value='1234567'/>
-      <button ng-click="ACntl.register(firstName,lastName,email,password,phonenumber)">Register</button>
+      <button ng-click="ACntl.register(email,password,firstName,lastName,phonenumber)">Register</button>
     </form>
   </div>
   <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>

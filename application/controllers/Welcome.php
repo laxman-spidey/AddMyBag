@@ -125,7 +125,7 @@ class Welcome extends CI_Controller {
 		$response = array();
 		$data = array();
 		$userId = $this->UserModel->getUserIdIfExists($request->email);			
-		if($userId > -1)
+		if($userId > -1)	
 		{
 			$response['responseCode'] = $request->responseCode->EMAIL_ALREADY_TAKEN;
 		}
@@ -134,17 +134,15 @@ class Welcome extends CI_Controller {
 			$data['last_name'] = $request->lastName;
 			$data['email'] = $request->email;
 			$data['password'] = $request->password;
-			if(isset($request->phoneNumber) && $request->phoneNumber == '')
+			
+			if($request->phoneNumber != '')
 			{
-				$data['phone'] == $request->phoneNumber;
+				$data['phone'] = $request->phoneNumber;
 			}
-			if(isset($request->gender) && $request->gender == '')
-			{
-				$data['gender'] == $request->gender;
-			}
+			
 			$userId = $this->UserModel->insertUser($data);
 			$response['userId'] = $userId;
-			$response['responseCode'] = $request->responseCode.REGISTER_SUCCESS;
+			$response['responseCode'] = $request->responseCode->REGISTER_SUCCESS;
 		}
 		echo json_encode($response);
 	}
