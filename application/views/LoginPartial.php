@@ -1,5 +1,6 @@
 <!-- Form Module-->
 <div class="module form-module" ng-app="AuthModule" ng-controller="AuthController as ACntl">
+  
   <div class="toggle"><i class="fa fa-times fa-pencil"></i>
     <div class="tooltip">Register</div>
   </div>
@@ -16,7 +17,7 @@
   
   <div class="form">
     <h2>Create an account</h2>
-    <form>
+    <form >
       <input type="text" placeholder="first name*" ng-model="firstName" value='laxman'/>
       <input type="text" placeholder="last name*" ng-model="lastName" value='spidey'/>
       <input type="email" placeholder="Email Address*" ng-model="email" value='mittu.thefire'/>
@@ -30,6 +31,10 @@
     <link rel="stylesheet" href="Styles/style.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
     
-    
+    <!-- Don't forget to place the script that does the asynchronous loading of Google+ JavaScript API.
+             Because it is loaded asynchronously, it might take some time to load. 
+             Place some loading notification, so user won't get confused. 
+             You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. -->
+        
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 </div>

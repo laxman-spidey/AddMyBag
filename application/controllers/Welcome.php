@@ -114,8 +114,6 @@ class Welcome extends CI_Controller {
 		//now create a datamodel and insert a row into it
 		return $this->UserModel->insertUser($data);
 		
-		
-		
 	}
 	public function register()
 	{
