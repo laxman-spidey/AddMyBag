@@ -1,4 +1,4 @@
-var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule']);
+var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','ngMaterial','google.places']);
 (function(){
     AddMyBag.run(function($rootScope)
     {
@@ -6,6 +6,14 @@ var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule']);
            AddMyBag.$inject = ['AuthModule'] ;
         });
     });
+    /*
+    angular.module('AddMyBag', ['ngMaterial'])
+        .config(function($mdThemingProvider) {
+          $mdThemingProvider.theme('default')
+            .primaryPalette('pink')
+            .accentPalette('orange');
+    });
+    */
 })();
 AddMyBag.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', { 

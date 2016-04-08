@@ -21,7 +21,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$this->load->helper('url');
-		$this->load->view('test');
+		$this->load->view('homepage');
 	}
 	public function testFunction()
 	{
@@ -32,53 +32,65 @@ class Welcome extends CI_Controller {
 	{
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
-		$email = $request->email;
+		$this->load->model('UserModel');
 		$response = array();
-		if($request->loggedVia == $request.LOGIN_VIA_APP)
-		{
-			
-		}
-		$response;
-		//further authentication code here
-		if($request->loggedVia == $request.LOGIN_VIA_FB)
-		{
-			
-		}
-		else if($request->loggedVia == $request.LOGIN_VIA_GOOGLE)
-		{
-		
-		}
 		$userId = $this->UserModel->getUserIdIfExists($request->email);			
-		if($userId >0 ) //if user exists
+		if($request->loggedVia == $request->LOGIN_VIA_APP)
 		{
-				header('success: true');
-				$response['success'] = true;
-				$response['userId'] = $userId;
-		}
-		else{
-			//register the user
-			$userId = $this->registerSocial($request);
-			if($userId >0)
+			if($userId > 0)
 			{
-				header('success: true');
-				$response['success'] = true;
-				$response['userId'] = $userId;
+				$userId = $this->UserModel->authenticateAppUser($request->email,$request->password);
+				if($userId > 0)
+				{
+					$response['success'] = true;
+					$response['userId'] = $userId;
+					$response['responseCode'] = $request->responseCode->LOGIN_SUCCESS;	
+				}
+				else {
+					$response['success'] = false;
+					$response['responseCode'] = $request->responseCode->WRONG_PASSWORD;	
+				}
 			}
-			else 
-			{
-				header('success: false');
+			else {
 				$response['success'] = false;
+				$response['responseCode'] = $request->responseCode->EMAIL_DOES_NOT_EXISTS;
 			}
 		}
-			
-		echo $response;
 		
-		//var_dump($username);
-		$arrayName = array(	'success' => 'true',
-							'username' => $username );
-		$string = json_encode($arrayName);
-		//var_dump($string);
-		//echo $string;
+		
+		//further authentication code here
+		else if($request->loggedVia == $request->LOGIN_VIA_FB)
+		{
+			if($userId >0 ) //if user exists
+			{
+					header('success: true');
+					$response['success'] = true;
+					$response['userId'] = $userId;
+			}
+			else{
+				//register the user
+				$userId = $this->registerSocial($request);
+				if($userId >0)
+				{
+					header('success: true');
+					$response['success'] = true;
+					$response['userId'] = $userId;
+				}
+				else 
+				{
+					header('success: false');
+					$response['success'] = false;
+				}
+			}
+			
+		}
+		else if($request->loggedVia == $request->LOGIN_VIA_GOOGLE)
+		{
+		
+		}
+		
+		echo json_encode($response);
+		
 	}
 	private function registerSocial($request)
 	{
@@ -100,10 +112,7 @@ class Welcome extends CI_Controller {
 		}
 		//data object is built.
 		//now create a datamodel and insert a row into it
-		$this->load->model('UserModel');
 		return $this->UserModel->insertUser($data);
-		
-		
 		
 	}
 	public function register()
@@ -114,7 +123,7 @@ class Welcome extends CI_Controller {
 		$response = array();
 		$data = array();
 		$userId = $this->UserModel->getUserIdIfExists($request->email);			
-		if($userId > -1)
+		if($userId > -1)	
 		{
 			$response['responseCode'] = $request->responseCode->EMAIL_ALREADY_TAKEN;
 		}
@@ -123,17 +132,15 @@ class Welcome extends CI_Controller {
 			$data['last_name'] = $request->lastName;
 			$data['email'] = $request->email;
 			$data['password'] = $request->password;
-			if(isset($request->phoneNumber) && $request->phoneNumber == '')
+			
+			if($request->phoneNumber != '')
 			{
-				$data['phone'] == $request->phoneNumber;
+				$data['phone'] = $request->phoneNumber;
 			}
-			if(isset($request->gender) && $request->gender == '')
-			{
-				$data['gender'] == $request->gender;
-			}
+			
 			$userId = $this->UserModel->insertUser($data);
 			$response['userId'] = $userId;
-			$response['responseCode'] = $request->responseCode.REGISTER_SUCCESS;
+			$response['responseCode'] = $request->responseCode->REGISTER_SUCCESS;
 		}
 		echo json_encode($response);
 	}

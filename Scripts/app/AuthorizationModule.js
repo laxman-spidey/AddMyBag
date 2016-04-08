@@ -1,14 +1,10 @@
-
 "use strict";
 var AuthModule = angular.module("AuthModule", ['ngRoute']);
 (function () {
-
-
-
+    
     //Definition for Authorization Controller
-
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, UserService ){
-        
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService ){
+        console.log("entered controller");
         var RESPONSE_CODE = {
             // login response codes
             LOGIN_SUCCESS : 100,
@@ -18,54 +14,52 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             //registration response codes
             REGISTER_SUCCESS : 103,
             EMAIL_ALREADY_TAKEN : 104
-        }
-        
-        FbAuthService.initialize();
-        // configuration object
-        var config = {
-            username : "dummy",
-            password : "dummy"
         };
+        
+        //FbAuthService.initialize();
+        //GplusAuthService.initialize();
         
         this.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');
             UserService.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
             
-        }
-        this.login = function(username,password)
-        {
-            var object = {
-                  username : username,
-                  password : password
-            };
-            AuthService.login(object, callback);
-        }
+        };
         
-        
-        var callback = function()
+        this.login = function(email,password)
         {
-            console.log("callback");
-        }
-        $scope.$on('$includeContentLoaded', function(event){
+            UserService.appLogin(email, password, RESPONSE_CODE, onResponseRecieved);
+        };
+        
+        $rootScope.$on('$includeContentLoaded', function(event){
             $rootScope.$broadcast("event:LoginModuleLoaded");
+            console.log("include content loaded");
             registerSwitchForms();
         });
-        
-        user.onResponseRecieved = function(response, responseCode)
+        $scope.$on("event:google-plus-signin-success", function(event, authResponse) {
+            console.log(authResponse);             
+            var request = {
+                email : authResponse.wc.hg,
+                firstName : authResponse.wc.Za,
+                lastName : authResponse.wc.Na,
+            };
+            UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
+            
+        });        
+        var onResponseRecieved = function(response, responseCode)
         {
             if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
             {
                 UserService.userId = response.userId;
                 //$scope.$broadcast('onSuccessfulLogin');
-                console.log("success");
+                console.log("success :"+ responseCode);
             }
             else
             {
                 //$scope.$broadcast('onFailure',{responseCode: responseCode});
                 console.log("failed: " + responseCode);
             }
-        }
+        };
 
         var registerSwitchForms = function()
         {
@@ -80,9 +74,9 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                     opacity: "toggle"
                 }, "slow");
             });
-        }
-    };
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','UserService']
+        };
+    }; 
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService']
     AuthModule.controller("AuthController",AuthController);
 
 
@@ -179,10 +173,10 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             $window.FB.Event.subscribe('auth.authResponseChange', function(response) {
                 console.log(response);
                 if (response.status === 'connected') {
-                    UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
+                    //UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
                     //console.log(factory.getUserInfo());
                     var fbobject = factory.getUserInfo();
-                    UserService.login(fbobject)
+                    
                 }
                 else {
                     UserService.logout();
@@ -235,20 +229,36 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      * Source: http://stackoverflow.com/questions/20809673/how-to-implement-google-sign-in-with-angularjs
      *
      * ***********************************************************************/
-     var GplusAuthService = function()
-     {
-         var factory = {};
-         factory.login = function() {
-             
-         };
+    var GplusAuthService = function()
+    {
+        var factory = {};
+        factory.login = function() {
+            
+        };
+        
+        factory.logout = function() {
+          
+        };
+        factory.initialize = function()
+        {
+            loadSDK();  
+        };
+        var loadSDK = function()
+        {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/client:plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        };
+        var getUserInfo = function()
+        {
+            
+        };
          
-         factory.logout = function() {
-             
-         };
-         
-         return factory;
-     }
-     
+        return factory;
+    }
+    GplusAuthService.$inject = ["UserService","$window"];
+    AuthModule.service("GplusAuthService",GplusAuthService);
+ 
      
      
     
@@ -274,12 +284,20 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         user.LOGIN_VIA_APP = 1;
         user.LOGIN_VIA_FB = 2;
         user.LOGIN_VIA_GOOGLE = 3;
-        
-        
+        user.loginRequestSent = false;
+        user.loginRequestSentVia = -1;
         
         
         user.register = function(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved) {
-             ServerInterface.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
+            var request = {
+                email : email,
+                password : password,
+                firstName : firstName,
+                lastName : lastName,
+                phoneNumber : phoneNumber,
+                responseCode : RESPONSE_CODE
+            };
+             ServerInterface.register(request, onResponseRecieved);
         };
         
         user.login = function(username,webToken,loggedVia) {
@@ -290,7 +308,44 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             console.log("user logged in : "+ webToken );
             //user.fbLogin();
         };
-        
+        user.appLogin = function(email, password, responseCode, onResponseRecieved)
+        {
+            if(user.loginRequestSent == false) {
+                user.loginRequestSent = true;
+                user.loginRequestSentVia = user.LOGIN_VIA_APP;
+                //then send request to the server
+                var request = {
+                    email : email,
+                    password : password,
+                    loggedVia : user.LOGIN_VIA_APP,
+                    LOGIN_VIA_APP : user.LOGIN_VIA_APP,
+                    LOGIN_VIA_FB : user.LOGIN_VIA_FB,
+                    LOGIN_VIA_GOOGLE : user.LOGIN_VIA_GOOGLE,
+                    responseCode : responseCode,
+                };
+                ServerInterface.login(request,onResponseRecieved);    
+            }
+            else
+            {
+                console.log("User already logged in via "+ user.loginRequestSentVia);                
+            }
+        };
+        user.socialLogin = function(email, firstName, lastName, accessToken, socialId, loggedVia, responseCode, onResponseRecieved)
+        {
+            var request = {
+                email : email,
+                firstName : firstName,
+                lastName : lastName,
+                accessToken : accessToken,
+                loggedVia : loggedVia,
+                LOGIN_VIA_APP : user.LOGIN_VIA_APP,
+                LOGIN_VIA_FB : user.LOGIN_VIA_FB,
+                LOGIN_VIA_GOOGLE : user.LOGIN_VIA_GOOGLE,
+                responseCode : responseCode,
+            };
+            ServerInterface.login(request, onResponseRecieved);
+            
+        };
         user.logout = function() {
             user.isLogged = false;
             user.username = ''; 
@@ -315,34 +370,19 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     var ServerInterface = function($http)
     {
         var factory = {};
-        factory.register = function(email, password, firstName, lastName, phoneNumber, responseCode, callback)
+        factory.register = function(request, callback)
         {
-            var request = {
-                email : email,
-                password : password,
-                firstName : firstName,
-                lastName : lastName,
-                phoneNumber : phoneNumber,
-                responseCode : responseCode
+            console.log(request);
+            $http.post("index.php/Welcome/register", request).success(function(data, status, headers, config) {
                 
-            } 
-            $http.post("index.php/Welcome/register", request)
-            .success(function(data, status, headers, config) {
-                if(headers.success == true)
-                {
-                    return data.userId;
-                }
                 callback(data, data.responseCode);
             });
         };
-        factory.login = function(userdata)
+        factory.login = function(request, callback)
         {
-            $http.post("index.php/Welcome/Login",userdata)
+            $http.post("index.php/Welcome/Login",request)
             .success(function(data, status, headers, config) {
-                if(headers.success == true)
-                {
-                    return data.userId;
-                }
+                    callback(data);
             });
         };
         return factory;
