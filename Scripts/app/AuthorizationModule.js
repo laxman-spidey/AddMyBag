@@ -4,7 +4,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
     
     //Definition for Authorization Controller
     var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService ){
-        
+        console.log("entered controller");
         var RESPONSE_CODE = {
             // login response codes
             LOGIN_SUCCESS : 100,
@@ -16,8 +16,8 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             EMAIL_ALREADY_TAKEN : 104
         };
         
-        FbAuthService.initialize();
-        GplusAuthService.initialize();
+        //FbAuthService.initialize();
+        //GplusAuthService.initialize();
         
         this.register = function(email,password,firstName,lastName,phoneNumber)
         {
@@ -31,13 +31,9 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             UserService.appLogin(email, password, RESPONSE_CODE, onResponseRecieved);
         };
         
-        var callback = function()
-        {
-            console.log("callback");
-        };
-        
-        $scope.$on('$includeContentLoaded', function(event){
+        $rootScope.$on('$includeContentLoaded', function(event){
             $rootScope.$broadcast("event:LoginModuleLoaded");
+            console.log("include content loaded");
             registerSwitchForms();
         });
         $scope.$on("event:google-plus-signin-success", function(event, authResponse) {
@@ -333,8 +329,8 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             {
                 console.log("User already logged in via "+ user.loginRequestSentVia);                
             }
-        }
-        user.socialLogin(email, firstName, lastName, accessToken, socialId, loggedVia, responseCode, onResponseRecieved)
+        };
+        user.socialLogin = function(email, firstName, lastName, accessToken, socialId, loggedVia, responseCode, onResponseRecieved)
         {
             var request = {
                 email : email,
@@ -349,7 +345,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             };
             ServerInterface.login(request, onResponseRecieved);
             
-        }
+        };
         user.logout = function() {
             user.isLogged = false;
             user.username = ''; 

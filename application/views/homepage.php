@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html ng-app="AddMyBag">
+<html>
     <head>
-        <meta name="google-site-verification" content="wyev4xf3u0pqzr7Qp36lSW3LpwbMOVu6wiNAjgx-r7Y" />
-        <title>AddMyBag</title>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">        
+        <link rel="stylesheet" href="Scripts/plugins/google.places.autocomplete/autocomplete.css">        
     </head>
-    <body ng-controller="testController">
-        {{testVar}}
+    <body ng-app="AddMyBag">
+        <md-toolbar >
+            <h1 class="md-primary">AddMyBag</h1>
+        </md-toolbar>
+        <md-content>
+            <input type="text" g-places-autocomplete ng-model="myScopeVar" />
+            <md-button class="md-primary" >Click me</md-button>    
+        </md-content>
         
-        <div id="fb-root"> <fb:login-button scope="public_profile,email,user_friends" show-faces="true" max-rows="1" size="large"></fb:login-button></div>
-        <br/>
-        <!--
-        <span id="googleSignIn">
-            <span id="signInButton"></span>
-        </span>
-        <google-plus-signin clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com">
-        -->
-        <div >
-            <div ng-include="'/index.php/Welcome/LoginPartial'"></div>
-        </div>
         
         
     </body>
@@ -30,11 +24,16 @@
     <script type="text/javascript" src="Scripts/app/AuthorizationModule.js"></script>
     <script type="text/javascript" src="Scripts/app/google-plus-signin.js"></script>
     <script type="text/javascript" src="Scripts/app/services/testService.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
 
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <!-- Google Maps library -->    
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+    <script type="text/javascript" src="Scripts/plugins/google.places.autocomplete/autocompletedirective.js"></script>
+    
 </html>
+
