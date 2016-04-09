@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `addmybag`
 --
-CREATE DATABASE IF NOT EXISTS `addmybag` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `addmybag`;
+CREATE DATABASE IF NOT EXISTS `AddMyBag` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `AddMyBag`;
 
 -- --------------------------------------------------------
 
@@ -29,14 +29,14 @@ USE `addmybag`;
 --
 
 CREATE TABLE IF NOT EXISTS `add_request` (
-  `Request_Id` int(11) NOT NULL,
-  `User_Id` int(11) NOT NULL COMMENT 'User ID FK',
-  `ToCountry` varchar(50) NOT NULL,
-  `ToLocation` varchar(100) NOT NULL,
-  `FromCountry` varchar(50) NOT NULL,
-  `FromLocation` varchar(100) NOT NULL,
-  `PreferredTimeOfArrival` datetime NOT NULL,
-  `Comment` varchar(500) NOT NULL
+  `request_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'User ID FK',
+  `to_country` varchar(50) NOT NULL,
+  `to_location` varchar(100) NOT NULL,
+  `from_country` varchar(50) NOT NULL,
+  `from_location` varchar(100) NOT NULL,
+  `preferred_time_of_arrival` datetime NOT NULL,
+  `comment` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -46,11 +46,11 @@ CREATE TABLE IF NOT EXISTS `add_request` (
 --
 
 CREATE TABLE IF NOT EXISTS `item` (
-  `ItemId` int(11) NOT NULL,
-  `Item_category` int(11) NOT NULL,
-  `Request_id` int(11) NOT NULL,
-  `Quantity` int(11) NOT NULL,
-  `Weight` decimal(10,0) NOT NULL
+  `item_id` int(11) NOT NULL,
+  `item_category` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `weight` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -60,24 +60,24 @@ CREATE TABLE IF NOT EXISTS `item` (
 --
 
 CREATE TABLE IF NOT EXISTS `location` (
-  `LocationId` int(11) NOT NULL,
-  `PlaceId` int(11) NOT NULL,
-  `Name` varchar(200) NOT NULL,
-  `Address` varchar(500) NOT NULL,
-  `Latitude` varchar(100) NOT NULL,
-  `Longitude` varchar(100) NOT NULL
+  `location_id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `address` varchar(500) NOT NULL,
+  `latitude` varchar(100) NOT NULL,
+  `longitude` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Location Master table';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `map`
+-- Table structure for table `link`
 --
 
-CREATE TABLE IF NOT EXISTS `map` (
-  `MapId` int(11) NOT NULL,
-  `PostId` int(11) NOT NULL,
-  `RequestId` int(11) NOT NULL
+CREATE TABLE IF NOT EXISTS `link` (
+  `map_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -87,11 +87,11 @@ CREATE TABLE IF NOT EXISTS `map` (
 --
 
 CREATE TABLE IF NOT EXISTS `review` (
-  `Review_Id` int(11) NOT NULL,
-  `Review_on_request` tinyint(1) NOT NULL COMMENT '0 for Post, 1 for Request',
-  `ByUserId` int(11) NOT NULL,
-  `Rating` decimal(10,0) NOT NULL,
-  `Review_txt` varchar(500) NOT NULL
+  `review_Id` int(11) NOT NULL,
+  `review_on_request` tinyint(1) NOT NULL COMMENT '0 for Post, 1 for Request',
+  `by_user_id` int(11) NOT NULL,
+  `rating` decimal(10,0) NOT NULL,
+  `review_txt` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -101,16 +101,16 @@ CREATE TABLE IF NOT EXISTS `review` (
 --
 
 CREATE TABLE IF NOT EXISTS `travel_post` (
-  `Post_id` int(11) NOT NULL,
-  `User_id` int(11) NOT NULL COMMENT 'User ID FK',
-  `From_country` varchar(50) NOT NULL,
-  `From_location` varchar(100) NOT NULL,
-  `To_country` varchar(50) NOT NULL,
-  `To_location` varchar(100) NOT NULL,
-  `Available_weight` decimal(10,0) NOT NULL,
-  `DateAndTimeOfDeparture` datetime NOT NULL,
-  `DateAndTimeOfArrival` datetime NOT NULL,
-  `PricePerKg` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'User ID FK',
+  `from_country` varchar(50) NOT NULL,
+  `from_location` varchar(100) NOT NULL,
+  `to_country` varchar(50) NOT NULL,
+  `to_location` varchar(100) NOT NULL,
+  `available_weight` decimal(10,0) NOT NULL,
+  `date_time_of_departure` datetime NOT NULL,
+  `date_time_of_arrival` datetime NOT NULL,
+  `price_per_kg` int(11) NOT NULL,
   `comment` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -121,17 +121,17 @@ CREATE TABLE IF NOT EXISTS `travel_post` (
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `Id` int(11) NOT NULL,
-  `First_name` varchar(50) NOT NULL,
-  `Last_name` varchar(50) NOT NULL,
-  `Password` varchar(50) NOT NULL,
-  `Email` varchar(100) NOT NULL,
-  `Phone Number` bigint(20) NOT NULL,
-  `Address` varchar(10000) NOT NULL,
-  `GoogleId` varchar(100) NOT NULL,
-  `FacebookId` varchar(100) NOT NULL,
-  `Alternate Number` int(11) NOT NULL,
-  `UserCreatedTs` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `user_id` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone Number` bigint(20) NOT NULL,
+  `address` varchar(10000) NOT NULL,
+  `google_id` varchar(100) NOT NULL,
+  `facebook_id` varchar(100) NOT NULL,
+  `alternate_phone` int(11) NOT NULL,
+  `user_created_TS` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
