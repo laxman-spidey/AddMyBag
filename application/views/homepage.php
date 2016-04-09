@@ -3,13 +3,13 @@
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">        
         <link rel="stylesheet" href="Scripts/plugins/google.places.autocomplete/autocomplete.css">        
     </head>
-    <body ng-app="AddMyBag">
+    <body ng-app="AddMyBag" ng-controller='testController'>
         <md-toolbar >
             <h1 class="md-primary">AddMyBag</h1>
         </md-toolbar>
         <md-content>
-            <input type="text" g-places-autocomplete ng-model="myScopeVar" />
-            <md-button class="md-primary" >Click me</md-button>    
+            <input type="text" g-places-autocomplete ng-model="place" />
+            <md-button class="md-primary" ng-click='showPlace()' >Click me</md-button>    
         </md-content>
         
         

@@ -11,6 +11,23 @@
             console.log(response);
         });
         
+        $scope.showPlace = function()
+        {
+            console.log($scope.place);
+            //console.log($scope.place.address_components[2].long_name);
+            var comp;
+            for(comp of $scope.place.address_components)
+            {
+                
+                if(comp.types[0] === 'country')
+                {
+                    console.log(comp);
+                    
+                    console.log(comp.long_name);
+                }
+                
+            }
+        }
     };
 
 
