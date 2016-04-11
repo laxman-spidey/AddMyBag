@@ -3,13 +3,34 @@
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">        
         <link rel="stylesheet" href="Scripts/plugins/google.places.autocomplete/autocomplete.css">        
     </head>
-    <body ng-app="AddMyBag" ng-controller='testController'>
-        <md-toolbar >
-            <h1 class="md-primary">AddMyBag</h1>
+    <body flex ng-app="AddMyBag" ng-controller='testController' ng-cloak>
+        <md-toolbar layout="row">
+            <h1 layout="column" class="md-primary">AddMyBag</h1>
+            <md-button layout-align="center end" ng-click="showTabDialog($event)"  class="md-primary" ng-click='showPlace()' >Login</md-button> 
+            
+            <md-button layout-align="center end"  >Google+</md-button>
+            <md-button layout-align="end" >Facebook</md-button>
         </md-toolbar>
         <md-content>
-            <input type="text" g-places-autocomplete ng-model="place" />
-            <md-button class="md-primary" ng-click='showPlace()' >Click me</md-button>    
+            <div ></div>
+            <form no-validate name="searchForm">
+                <md-input-container>
+                    <label>from</label>
+                    <input type="text" g-places-autocomplete name="fromPlace" ng-model="fromPlace" required />
+                    <div ng-messages="searchForm.fromPlace.$error" ng-show="searchForm.fromPlace.$dirty">
+                        <div ng-message="required">This is required!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>to</label>
+                    <input type="text" g-places-autocomplete name="toPlace" ng-model="toPlace" required />
+                    <div ng-messages="searchForm.toPlace.$error" ng-show="searchForm.toPlace.$dirty">
+                        <div ng-message="required">This is required!</div>
+                    </div>
+                </md-input-container>
+                
+                <md-button  class="md-primary md-raised" ng-click='showPlace()' >Search</md-button>    
+            </form>
         </md-content>
         
         

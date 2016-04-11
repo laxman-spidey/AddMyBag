@@ -1,4 +1,69 @@
-<!-- Form Module-->
+<md-dialog aria-label="Mango (Fruit)">
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Identify Yourself</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="width:300px;max-width:400px;max-height:810px; ">
+      <md-tabs md-dynamic-height  md-stretch-tabs="always" md-border-bottom>
+        <md-tab label="login">
+          <md-content layout-padding>
+            <form no-validate name="userForm">
+                <md-input-container class="md-block">
+                    <md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
+                    <label>Email</label>
+                    <input type="text" name="email" ng-model="email" required />
+                    <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
+                        <div ng-message="required">Enter your EmailID</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" >
+                    <label>password</label>
+                    <input type="password" name="password" ng-model="password" required />
+                    <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty">
+                        <div ng-message="required">This is required!</div>
+                    </div>
+                </md-input-container >
+                <md-input-container  class="md-block" > 
+									  <md-button class="md-raised" >Login</md-button>
+							</md-input-container>
+            </form>
+          </md-content>
+        </md-tab>
+        <md-tab label="register">
+          <md-content class="md-padding">
+            
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+    <!--
+    <md-dialog-actions layout="row">
+      <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+        More on Wikipedia
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="answer('not useful')" >
+        Not Useful
+      </md-button>
+      <md-button ng-click="answer('useful')" style="margin-right:20px;" >
+        Useful
+      </md-button>
+    </md-dialog-actions>
+    -->
+  </form>
+</md-dialog>
+
+
+
+
+<!-- Form Module
+<md-dialog aria-label="label">
 <div  ng-app="AuthModule" ng-controller="AuthController as ACntl">
 
   <div layout="row">
@@ -67,7 +132,7 @@
   </div>
   <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>
   -->
-    
+    <!--
     <link rel="stylesheet" href="Styles/style.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
     
@@ -75,6 +140,8 @@
              Because it is loaded asynchronously, it might take some time to load. 
              Place some loading notification, so user won't get confused. 
              You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. -->
-        
+        <!--
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 </div>
+</md-dialog>
+-->
