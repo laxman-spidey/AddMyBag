@@ -5,6 +5,7 @@ var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','ngMaterial','
         $rootScope.$on("event:LoginModuleLoaded", function (event){
            AddMyBag.$inject = ['AuthModule'] ;
         });
+        
     });
     /*
     angular.module('AddMyBag', ['ngMaterial'])
@@ -14,6 +15,7 @@ var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','ngMaterial','
             .accentPalette('orange');
     });
     */
+    
 })();
 AddMyBag.config(['$routeProvider',"$mdIconProvider", function($routeProvider, $mdIconProvider) {
         $routeProvider.when('/login', { 
