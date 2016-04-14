@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2016 at 05:46 PM
+-- Generation Time: Apr 09, 2016 at 03:25 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -17,8 +17,102 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `AddMyBag`
+-- Database: `addmybag`
 --
+CREATE DATABASE IF NOT EXISTS `AddMyBag` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `AddMyBag`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `add_request`
+--
+
+CREATE TABLE IF NOT EXISTS `add_request` (
+  `request_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'User ID FK',
+  `to_country` varchar(50) NOT NULL,
+  `to_location` varchar(100) NOT NULL,
+  `from_country` varchar(50) NOT NULL,
+  `from_location` varchar(100) NOT NULL,
+  `preferred_time_of_arrival` datetime NOT NULL,
+  `comment` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item`
+--
+
+CREATE TABLE IF NOT EXISTS `item` (
+  `item_id` int(11) NOT NULL,
+  `item_category` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `weight` decimal(10,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location`
+--
+
+CREATE TABLE IF NOT EXISTS `location` (
+  `location_id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `address` varchar(500) NOT NULL,
+  `latitude` varchar(100) NOT NULL,
+  `longitude` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Location Master table';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `link`
+--
+
+CREATE TABLE IF NOT EXISTS `link` (
+  `map_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE IF NOT EXISTS `review` (
+  `review_Id` int(11) NOT NULL,
+  `review_on_request` tinyint(1) NOT NULL COMMENT '0 for Post, 1 for Request',
+  `by_user_id` int(11) NOT NULL,
+  `rating` decimal(10,0) NOT NULL,
+  `review_txt` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `travel_post`
+--
+
+CREATE TABLE IF NOT EXISTS `travel_post` (
+  `post_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'User ID FK',
+  `from_country` varchar(50) NOT NULL,
+  `from_location` varchar(100) NOT NULL,
+  `to_country` varchar(50) NOT NULL,
+  `to_location` varchar(100) NOT NULL,
+  `available_weight` decimal(10,0) NOT NULL,
+  `date_time_of_departure` datetime NOT NULL,
+  `date_time_of_arrival` datetime NOT NULL,
+  `price_per_kg` int(11) NOT NULL,
+  `comment` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -27,14 +121,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `fb_id` int(20) NOT NULL,
-  `gender` varchar(1) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`,`fb_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `user_id` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone Number` bigint(20) NOT NULL,
+  `address` varchar(10000) NOT NULL,
+  `google_id` varchar(100) NOT NULL,
+  `facebook_id` varchar(100) NOT NULL,
+  `alternate_phone` int(11) NOT NULL,
+  `user_created_TS` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
