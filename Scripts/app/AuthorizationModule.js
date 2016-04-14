@@ -18,7 +18,11 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         
         //FbAuthService.initialize();
         //GplusAuthService.initialize();
-        
+        $scope.cancel = function()
+        {
+            console.log("close function");
+            $mdDialog.cancel();
+        }
         this.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');

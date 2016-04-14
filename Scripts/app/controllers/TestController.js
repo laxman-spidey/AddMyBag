@@ -10,10 +10,14 @@
             $scope.testVar = response.testString;
             console.log(response);
         });
-        
+        $scope.cancel = function()
+        {
+                console.log("coming into close");
+                $mdDialog.cancel();
+        }
         $scope.showTabDialog = function(ev) {
             $mdDialog.show({
-                //controller: DialogController,
+                controller: DialogController,
                 templateUrl: 'index.php/Welcome/LoginPartial', 
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -23,7 +27,8 @@
                 }, function() {
                     $scope.status = 'You cancelled the dialog.';
             });
-      };
+            
+        };
         
         $scope.showPlace = function()
         {
@@ -46,6 +51,17 @@
         }
     };
 
+    function DialogController($scope, $mdDialog) {
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function(answer) {
+            $mdDialog.hide(answer);
+        };
+    }
 
     testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog"];
     AddMyBag.controller("testController",testController);

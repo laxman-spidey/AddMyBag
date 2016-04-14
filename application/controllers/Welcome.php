@@ -154,6 +154,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('channel');
 	}
 	
+	public function TravelPostPartial()
+	{
+		$this->load->view('TravelPost.php');
+	}
+	
 	
 	public function fbLogin()
 	{
