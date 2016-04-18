@@ -2,6 +2,9 @@
 (function () {
     var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog) {
         var base_url = window.location.origin;
+        
+        $scope.dateOfArrival = new Date();
+        $scope.currentDate = new Date();
         $scope.testVar = "testing testing testing";
         $timeout(function() {
             $scope.testVar = "after some timeout";

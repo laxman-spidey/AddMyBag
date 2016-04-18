@@ -55,6 +55,7 @@
     <style type="text/css">
       .inputIcons {
         /*
+        
       .right-icon {
         position: absolute;
         top: 4px;
@@ -97,7 +98,9 @@
     <script type="text/javascript" src="Scripts/plugins/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="Scripts/app/app.js"></script>
     <script type="text/javascript" src="Scripts/app/controllers/TestController.js"></script>
+    <script type="text/javascript" src="Scripts/app/controllers/TravelFormController.js"></script>
     
+    <script type="text/javascript" src="Scripts/app/AppConstantsModule.js"></script>
     <script type="text/javascript" src="Scripts/app/AuthorizationModule.js"></script>
     <script type="text/javascript" src="Scripts/app/google-plus-signin.js"></script>
     <script type="text/javascript" src="Scripts/app/services/testService.js"></script>

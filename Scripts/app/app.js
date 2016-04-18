@@ -1,4 +1,4 @@
-var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','ngMaterial','ngMessages','google.places']);
+var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','AppConstantsModule','ngMaterial','ngMessages','google.places']);
 (function(){
     AddMyBag.run(function($rootScope)
     {
