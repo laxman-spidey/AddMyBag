@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `add_request` (
   `preferred_time_of_arrival` datetime,
   `weight` DECIMAL(7,2),
   `comment` varchar(200),
+  `status` varchar(1),
   CONSTRAINT fk_add_from FOREIGN KEY (from_location) REFERENCES location(location_id),
   CONSTRAINT fk_add_to FOREIGN KEY (to_location) REFERENCES location(location_id),
   CONSTRAINT fk_add_user FOREIGN KEY (user_id) REFERENCES user(user_id)
@@ -100,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `travel_post` (
   `date_time_of_arrival` datetime NOT NULL,
   `price_per_kg` DECIMAL(7,2) DEFAULT 0,
   `comment` varchar(200),
+  `status` varchar(1),
   CONSTRAINT fk_post_from FOREIGN KEY (from_location) REFERENCES location(location_id),
   CONSTRAINT fk_post_to FOREIGN KEY (to_location) REFERENCES location(location_id),
   CONSTRAINT fk_post_user FOREIGN KEY (user_id) REFERENCES user(user_id)
@@ -145,6 +147,7 @@ CREATE TABLE IF NOT EXISTS `link` (
   `request_id` int(11) NOT NULL,
   `review_on_add_id` int(11),
   `review_on_post_id` int(11),
+  `status` varchar(1),
   CONSTRAINT fk_link_add FOREIGN KEY (request_id) REFERENCES add_request(request_id),
   CONSTRAINT fk_link_post FOREIGN KEY (post_id) REFERENCES travel_post(post_id),
   CONSTRAINT fk_link_post_review FOREIGN KEY (review_on_add_id) REFERENCES review(review_id),
