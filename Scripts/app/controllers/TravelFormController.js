@@ -12,15 +12,19 @@
             var location = {};
             
             //console.log($scope.place.address_components[2].long_name);
-            location["type"] = responseFromGoogle.types[0];
-            location["place_id"] = responseFromGoogle.place_id;
-            location["formatted_address"] = responseFromGoogle.formatted_address;
-            location["latitude"] = responseFromGoogle.geometry.viewport;
-            location["longitude"] = responseFromGoogle.geometry.viewport;
+            location.type               = responseFromGoogle.types[0];
+            location.place_id           = responseFromGoogle.place_id;
+            location.formatted_address  = responseFromGoogle.formatted_address;
+            location.latitude           = responseFromGoogle.geometry.viewport;
+            location.longitude          = responseFromGoogle.geometry.viewport;
             var comp;
             for(comp of responseFromGoogle.address_components)
             {
-                if(comp.types[0] === 'locality' || comp.types[0] === 'country' || comp.types[0] === 'administrative_area_level_2' || comp.types[0] === 'administrative_area_level_1' || comp.types[0] === 'postal_code')
+                if(    comp.types[0] === 'locality' 
+                    || comp.types[0] === 'country' 
+                    || comp.types[0] === 'administrative_area_level_2' 
+                    || comp.types[0] === 'administrative_area_level_1' 
+                    || comp.types[0] === 'postal_code')
                 {
                     location[comp.types[0]] = comp.long_name;
                 }
@@ -31,7 +35,6 @@
         };
         $scope.registerTheTravel = function()
         {
-            
             var fromPlace = extractAddressComponents($scope.fromPlace);
             var toPlace = extractAddressComponents($scope.toPlace);
             var request = {
@@ -42,7 +45,6 @@
                 pricePerKg  : $scope.pricePerKg
             }
             console.log(request);
-            
         };
         
         
@@ -114,7 +116,16 @@
     
     var TravelFormService = function($http)
     {
-           
+        var factory = {};
+        factory.insertTravelPost = function(request) {
+            $http.post("index.php/Welcome/registerTheTravel", request)
+                .success(function(data, status, headers, config) {
+                    
+                })
+                .error(function(data, status, headers, config) {
+                    
+                });
+        }
     }
     
     TravelFormService.$inject = ["$http"]

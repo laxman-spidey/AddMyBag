@@ -12,17 +12,15 @@
                 <h1 layout="column" class="md-primary">AddMyBag</h1>
             </span>
             <span>
-                <md-button layout="column" ng-click="showTabDialog($event)"  class="md-primary" ng-click='showPlace()' >Log in</md-button> 
+                <md-button layout="column" ng-click="showTabDialog($event)" aria-label="login" class="md-primary" ng-click='showPlace()' >Log in</md-button> 
                 
-                <md-button layout="column" layout-align="center" style="" >
+                <md-button layout="column" layout-align="center" style="" aria-label="Google" >
                     <img src="img/gplus.png" style="width:24px;height:24p" ></img>
                 </md-button>
-                <md-button layout="column" layout-align="center" ><img src="img/fb.png" style="width:24px;height:24p"></img></md-button>
+                <md-button layout="column" layout-align="center" ><img src="img/fb.png" aria-label="facebook" style="width:24px;height:24p"></img></md-button>
             </span>
         </md-toolbar>
         <md-content>
-            
-            <div ></div>
             <form class="inputIcons" no-validate name="searchForm">
                 
                 <md-input-container>

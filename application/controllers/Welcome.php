@@ -159,6 +159,78 @@ class Welcome extends CI_Controller {
 		$this->load->view('TravelPost.php');
 	}
 	
+	public function registerTheTravel()
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$travel = array();
+		$travel['user_id'] = $request->user_id;
+		$travel['available_weight'] = $request->weight;
+		$travel['price_per_kg'] = $request->pricePerKg;
+		if(isset($request->dateOfArrival))
+		{
+			$travel['date_time_of_arrival'] = $request->dateOfArrival;	
+		}
+		if(isset($request->comment))
+		{
+			$travel['comment'] = $request->comment;	
+		}
+		
+		
+		$fromPlace = buildLocationData($request->from);
+		$toPlace = buildLocationData($request->to);
+		
+		$this->load->model('TravelModel');
+		$success = $this->TravelModel->insert($travel, $fromPlace, $toPlace);
+		
+		$response = array();
+		if($success != -1)
+		{
+			$response["success"] = true;
+		}
+		echo $response;
+		
+	}
+	
+	private function buildLocationData($request)
+	{
+		$location = array();
+		$location = array();
+		
+		$location['place_id'] = $request->place_id;	
+		$location['address'] = $request->formatted_address;	
+		$location['country'] = $request->place_id;	
+		
+		if(isset($request->locality))
+		{
+			$location['locality'] = $request->locality;	
+		}
+		if(isset($fromRequest->locality))
+		{
+			$location['locality'] = $request->locality;	
+		}
+		if(isset($fromRequest->sub_locality))
+		{
+			$location['sub_locality'] = $request->sub_locality;	
+		}
+		if(isset($fromRequest->administrative_area_level_2))
+		{
+			$location['administrative_area_level_2'] = $request->administrative_area_level_2;	
+		}
+		if(isset($fromRequest->administrative_area_level_1))
+		{
+			$location['administrative_area_level_1'] = $request->administrative_area_level_1;	
+		}
+		if(isset($fromRequest->latitude))
+		{
+			$location['latitude'] = $request->latitude;	
+		}
+		if(isset($fromRequest->longitude))
+		{
+			$location['longitude'] = $request->longitude;	
+		}
+		return $location;
+	}
 	
 	public function fbLogin()
 	{
