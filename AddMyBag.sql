@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `location` (
   `location_id` int(11) PRIMARY KEY AUTO_INCREMENT,
-  `place_id` VARCHAR(70) NOT NULL,
+  `place_id` VARCHAR(70) NOT NULL UNIQUE,
   `address` varchar(75) NOT NULL,
   `locality` varchar(30),
   `sub_locality` varchar(30),
