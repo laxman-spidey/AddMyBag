@@ -32,10 +32,22 @@
         
         function getDateInSQLformat(date)
         {
-            var dateString = date.toISOString();
-            dateString = dateString.replace("T"," ");
-            dateString = dateString.substring(0, dateString.length - 5);
-            return dateString;
+            //var dateString = date.toISOString();
+            //dateString = dateString.replace("T"," ");
+            //dateString = dateString.substring(0, dateString.length - 5);
+            var dateString = date.toString();
+            //console.log(dateString);
+            var finalString = date.getFullYear() 
+                              +"-"+ date.getMonth()
+                              +"-"+ date.getDate()
+                              +" "+ date.getHours()
+                              +":"+ date.getMinutes()
+                              +":"+ date.getSeconds()
+                              ;
+            console.log(date.getTimezoneOffset());
+            return finalString;
+            
+            
         }
         $scope.registerTheTravel = function()
         {
