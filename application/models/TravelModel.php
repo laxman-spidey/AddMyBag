@@ -24,18 +24,23 @@ class TravelModel extends CI_Model {
     }
     public function insertLocation($location)
     {
-        
-        $this->db->select('location_id')->from($this->LOCATION)->where('place_id',$location->placeId);
+        $place = $location["place_id"];
+        $test = $this->db->select('location_id')->from('location')->where('place_id',$place);
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $locationId = $query->result();
+            foreach ($query->result() as $row)
+            {
+               $locationId = $row->location_id;
+            }
+            return $locationId;
         }
         else {
             $inserted = $this->db->insert($this->LOCATION,$location);
             if($inserted == true)
             {
-                return $this->db->insert_id();    
+                $insertID =  $this->db->insert_id();    
+                return $insertID;
             }
             else
             {
