@@ -1,6 +1,6 @@
 "use strict";
 (function () {
-    var TravelFormController = function ($scope, $rootScope,constants,$timeout,$mdDialog) {
+    var TravelFormController = function ($scope, $rootScope,constants,$timeout,$mdDialog, TravelFormService) {
         
         
         $scope.weight = 5;
@@ -35,6 +35,7 @@
         };
         $scope.registerTheTravel = function()
         {
+            console.log("register travel");
             var fromPlace = extractAddressComponents($scope.fromPlace);
             var toPlace = extractAddressComponents($scope.toPlace);
             var request = {
@@ -42,9 +43,11 @@
                 to          : toPlace,
                 arrivalDate : $scope.dateOfArrival,
                 weight      : $scope.weight,
-                pricePerKg  : $scope.pricePerKg
+                pricePerKg  : $scope.pricePerKg,
+                userId      : 1
             }
             console.log(request);
+            TravelFormService.insertTravelPost(request);
         };
         
         
@@ -110,7 +113,7 @@
         };
     }
 
-    TravelFormController.$inject = ["$scope","$rootScope","constants","$timeout","$mdDialog"];
+    TravelFormController.$inject = ["$scope","$rootScope","constants","$timeout","$mdDialog","TravelFormService"];
     AddMyBag.controller("TravelFormController",TravelFormController);
     
     
@@ -120,12 +123,13 @@
         factory.insertTravelPost = function(request) {
             $http.post("index.php/Welcome/registerTheTravel", request)
                 .success(function(data, status, headers, config) {
-                    
+                    console.log(data);
                 })
                 .error(function(data, status, headers, config) {
-                    
+                    console.log("failure");
                 });
         }
+        return factory;
     }
     
     TravelFormService.$inject = ["$http"]

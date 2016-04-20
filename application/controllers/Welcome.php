@@ -164,7 +164,7 @@ class Welcome extends CI_Controller {
 		$postdata = file_get_contents("php://input");
 		$request = json_decode($postdata);
 		$travel = array();
-		$travel['user_id'] = $request->user_id;
+		$travel['user_id'] = $request->userId;
 		$travel['available_weight'] = $request->weight;
 		$travel['price_per_kg'] = $request->pricePerKg;
 		if(isset($request->dateOfArrival))
@@ -177,8 +177,8 @@ class Welcome extends CI_Controller {
 		}
 		
 		
-		$fromPlace = buildLocationData($request->from);
-		$toPlace = buildLocationData($request->to);
+		$fromPlace = $this->buildLocationData($request->from);
+		$toPlace = $this->buildLocationData($request->to);
 		
 		$this->load->model('TravelModel');
 		$success = $this->TravelModel->insert($travel, $fromPlace, $toPlace);
@@ -188,8 +188,7 @@ class Welcome extends CI_Controller {
 		{
 			$response["success"] = true;
 		}
-		echo $response;
-		
+		echo json_encode($response);
 	}
 	
 	private function buildLocationData($request)

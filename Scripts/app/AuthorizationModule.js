@@ -3,7 +3,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
 (function () {
     
     //Definition for Authorization Controller
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService ){
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
         console.log("entered controller");
         var RESPONSE_CODE = {
             // login response codes
@@ -23,7 +23,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             console.log("close function");
             $mdDialog.cancel();
         }
-        this.register = function(email,password,firstName,lastName,phoneNumber)
+        $scope.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');
             UserService.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
@@ -80,7 +80,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             });
         };
     }; 
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService']
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"]
     AuthModule.controller("AuthController",AuthController);
 
 

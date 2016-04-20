@@ -1,5 +1,5 @@
 
-<md-dialog aria-label="Mango (Fruit)">
+<md-dialog ng-controller="AuthController" aria-label="Mango (Fruit)">
   <form>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -65,7 +65,7 @@
                     <md-icon class="material-icons" >account_circle</md-icon>
                     <label>Last Name</label>
                     <input type="text" name="lastName" ng-model="lastName" required />
-                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.firstName.$dirty">
+                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
                         <div ng-message="required">This is required!</div>
                     </div>
                 </md-input-container >
@@ -99,7 +99,7 @@
                 
                 <div  layout="row" layout-align="end" class="no-margin" >
                   <md-input-container  class="md-block" > 
-									  <md-button class="md-raised md-primary" >register</md-button>
+									  <md-button class="md-raised md-primary" ng-click="register(email,password,firstName,lastName,phone)" >register</md-button>
 							    </md-input-container>  
                 </div>
                 

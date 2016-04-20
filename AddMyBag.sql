@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `last_name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `phone Number` bigint(20) NOT NULL,
+  `phone` bigint(20) NOT NULL,
   `address` varchar(10000) NOT NULL,
   `google_id` varchar(100) NOT NULL,
   `facebook_id` varchar(100) NOT NULL,
