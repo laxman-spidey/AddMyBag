@@ -10,13 +10,11 @@
         {
             console.log(responseFromGoogle);
             var location = {};
-            
-            //console.log($scope.place.address_components[2].long_name);
             location.type               = responseFromGoogle.types[0];
             location.place_id           = responseFromGoogle.place_id;
             location.formatted_address  = responseFromGoogle.formatted_address;
-            location.latitude           = responseFromGoogle.geometry.viewport;
-            location.longitude          = responseFromGoogle.geometry.viewport;
+            location.latitude           = responseFromGoogle.geometry.location.lat();
+            location.longitude          = responseFromGoogle.geometry.location.lng();
             var comp;
             for(comp of responseFromGoogle.address_components)
             {
@@ -29,23 +27,31 @@
                     location[comp.types[0]] = comp.long_name;
                 }
             }    
-            
             return location;
-            
         };
+        
+        function getDateInSQLformat(date)
+        {
+            var dateString = date.toISOString();
+            dateString = dateString.replace("T"," ");
+            dateString = dateString.substring(0, dateString.length - 5);
+            return dateString;
+        }
         $scope.registerTheTravel = function()
         {
             console.log("register travel");
             var fromPlace = extractAddressComponents($scope.fromPlace);
             var toPlace = extractAddressComponents($scope.toPlace);
+            var dateString = getDateInSQLformat($scope.dateOfArrival);
+            
             var request = {
                 from        : fromPlace,
                 to          : toPlace,
-                arrivalDate : $scope.dateOfArrival,
+                arrivalDate : dateString,
                 weight      : $scope.weight,
                 pricePerKg  : $scope.pricePerKg,
                 userId      : 1
-            }
+            };
             console.log(request);
             TravelFormService.insertTravelPost(request);
         };

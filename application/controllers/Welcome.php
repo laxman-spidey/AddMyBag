@@ -167,9 +167,10 @@ class Welcome extends CI_Controller {
 		$travel['user_id'] = $request->userId;
 		$travel['available_weight'] = $request->weight;
 		$travel['price_per_kg'] = $request->pricePerKg;
-		if(isset($request->dateOfArrival))
+		if(isset($request->arrivalDate))
 		{
-			$travel['date_time_of_arrival'] = $request->dateOfArrival;	
+			$travel['date_time_of_arrival'] = $request->arrivalDate;	
+			$travel['date_time_of_arrival'] = $request->arrivalDate;	
 		}
 		if(isset($request->comment))
 		{
@@ -191,42 +192,42 @@ class Welcome extends CI_Controller {
 		echo json_encode($response);
 	}
 	
-	private function buildLocationData($request)
+	private function buildLocationData($requestLocation)
 	{
 		$location = array();
 		$location = array();
 		
-		$location['place_id'] = $request->place_id;	
-		$location['address'] = $request->formatted_address;	
-		$location['country'] = $request->place_id;	
+		$location['place_id'] = $requestLocation->place_id;	
+		$location['address'] = $requestLocation->formatted_address;
+		$location['country'] = $requestLocation->place_id;	
 		
+		if(isset($requestLocation->locality))
+		{
+			$location['locality'] = $requestLocation->locality;	
+		}
 		if(isset($request->locality))
 		{
-			$location['locality'] = $request->locality;	
+			$location['locality'] = $requestLocation->locality;	
 		}
-		if(isset($fromRequest->locality))
+		if(isset($requestLocation->sub_locality))
 		{
-			$location['locality'] = $request->locality;	
+			$location['sub_locality'] = $requestLocation->sub_locality;	
 		}
-		if(isset($fromRequest->sub_locality))
+		if(isset($requestLocation->administrative_area_level_2))
 		{
-			$location['sub_locality'] = $request->sub_locality;	
+			$location['administrative_area_level_2'] = $requestLocation->administrative_area_level_2;	
 		}
-		if(isset($fromRequest->administrative_area_level_2))
+		if(isset($requestLocation->administrative_area_level_1))
 		{
-			$location['administrative_area_level_2'] = $request->administrative_area_level_2;	
+			$location['administrative_area_level_1'] = $requestLocation->administrative_area_level_1;	
 		}
-		if(isset($fromRequest->administrative_area_level_1))
+		if(isset($requestLocation->latitude))
 		{
-			$location['administrative_area_level_1'] = $request->administrative_area_level_1;	
+			$location['latitude'] = $requestLocation->latitude;	
 		}
-		if(isset($fromRequest->latitude))
+		if(isset($requestLocation->longitude))
 		{
-			$location['latitude'] = $request->latitude;	
-		}
-		if(isset($fromRequest->longitude))
-		{
-			$location['longitude'] = $request->longitude;	
+			$location['longitude'] = $requestLocation->longitude;	
 		}
 		return $location;
 	}
