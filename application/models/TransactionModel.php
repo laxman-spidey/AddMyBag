@@ -1,14 +1,29 @@
 <?php
-class TravelModel extends CI_Model {
+class TransactionModel extends CI_Model {
     
     private $TRAVEL_POST = "travel_post";
+    private $ADD_REQUEST = "add_request";
     private $LOCATION = "location";
         
     public function __construct()
     {
         $this->load->database();
     }
-    public function insert($travelPost, $fromPlace, $toPlace)
+    public function insertAddRequest($addRequest, $fromPlace, $toPlace)
+    {
+        $fromId = $this->insertLocation($fromPlace);
+        $toId = $this->insertLocation($toPlace);
+        
+        if($fromId == -1 || $toId == -1) {
+            return -1;
+        } else {
+            $travelPost["from_location"] = $fromId;
+            $travelPost["to_location"] = $toId;    
+            $this->db->insert($this->ADD_REQUEST,$addRequest);
+            return $this->db->insert_id();
+        }
+    }
+    public function insertTravelPost($travelPost, $fromPlace, $toPlace)
     {
         $fromId = $this->insertLocation($fromPlace);
         $toId = $this->insertLocation($toPlace);

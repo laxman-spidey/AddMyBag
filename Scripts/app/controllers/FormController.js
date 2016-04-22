@@ -160,6 +160,6 @@
         }
     }
     
-    TravelFormService.$inject = ["$http"]
+    FormService.$inject = ["$http"];
     AddMyBag.service("FormService",FormService);
 })();

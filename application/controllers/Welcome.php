@@ -163,7 +163,35 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('AddRequestPartial.php');
 	}
-	
+	public function registerTheRequest()
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		$addReq = array();
+		$addReq['user_id'] = $request->userId;
+		$addReq['weight'] = $request->weight;
+		if(isset($request->arrivalDate))
+		{
+			$addReq['date_time_of_arrival'] = $request->arrivalDate;	
+		}
+		if(isset($request->comment))
+		{
+			$addReq['comment'] = $request->comment;	
+		}
+		
+		$fromPlace = $this->buildLocationData($request->from);
+		$toPlace = $this->buildLocationData($request->to);
+		
+		$this->load->model('TransactionModel');
+		$success = $this->TransactionModel->insertAddRequest($addReq, $fromPlace, $toPlace);
+		
+		$response = array();
+		if($success != -1)
+		{
+			$response["success"] = true;
+		}
+		echo json_encode($response);	
+	}
 	public function registerTheTravel()
 	{
 		$postdata = file_get_contents("php://input");
@@ -175,7 +203,6 @@ class Welcome extends CI_Controller {
 		if(isset($request->arrivalDate))
 		{
 			$travel['date_time_of_arrival'] = $request->arrivalDate;	
-			$travel['date_time_of_arrival'] = $request->arrivalDate;	
 		}
 		if(isset($request->comment))
 		{
@@ -186,8 +213,8 @@ class Welcome extends CI_Controller {
 		$fromPlace = $this->buildLocationData($request->from);
 		$toPlace = $this->buildLocationData($request->to);
 		
-		$this->load->model('TravelModel');
-		$success = $this->TravelModel->insert($travel, $fromPlace, $toPlace);
+		$this->load->model('TransactionModel');
+		$success = $this->TransactionModel->insertTravelPost($travel, $fromPlace, $toPlace);
 		
 		$response = array();
 		if($success != -1)
