@@ -159,6 +159,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('TravelPost.php');
 	}
 	
+	public function AddRequestPartial()
+	{
+		$this->load->view('AddRequestPartial.php');
+	}
+	
 	public function registerTheTravel()
 	{
 		$postdata = file_get_contents("php://input");

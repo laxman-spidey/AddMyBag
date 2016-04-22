@@ -7,7 +7,7 @@
         
     </head>
     <body flex ng-app="AddMyBag" ng-controller='testController' ng-cloak>
-        <md-toolbar layout="row" class="md-medium-tall " layout="row" layout-align="space-between center">
+        <md-toolbar layout="row" class="md-medium-tall "  layout-align="space-between center">
             <span layout-padding>
                 <h1 layout="column" class="md-primary">AddMyBag</h1>
             </span>
@@ -45,8 +45,14 @@
                 <md-button  class="md-primary md-raised" ng-click='showPlace()'  >Search</md-button>    
             </form>
         </md-content>
-        
-        <div ng-include="'/index.php/Welcome/TravelPostPartial'"></div>
+        <div >
+            <div >
+                <div ng-include="'/index.php/Welcome/AddRequestPartial'"></div>    
+            </div>
+            <div >
+                <div ng-include="'/index.php/Welcome/TravelPostPartial'"></div>    
+            </div>
+        </div>
         
     </body>
     
@@ -99,7 +105,7 @@
     <!-- Application Script files -->
     <script type="text/javascript" src="Scripts/app/app.js"></script>
     <script type="text/javascript" src="Scripts/app/controllers/TestController.js"></script>
-    <script type="text/javascript" src="Scripts/app/controllers/TravelFormController.js"></script>
+    <script type="text/javascript" src="Scripts/app/controllers/FormController.js"></script>
     <script type="text/javascript" src="Scripts/app/AppConstantsModule.js"></script>
     <script type="text/javascript" src="Scripts/app/AuthorizationModule.js"></script>
     <script type="text/javascript" src="Scripts/app/google-plus-signin.js"></script>

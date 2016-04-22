@@ -1,4 +1,4 @@
-<md-whiteframe ng-controller="TravelFormController"  class="md-whiteframe-5dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
+<md-whiteframe ng-controller="FormController"  class="md-whiteframe-5dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
     <form class="inputIcons" layout-margin no-validate name="travelForm">
         <md-input-container class=" md-icon-float md-block" >
             <md-icon class="material-icons" >location_on</md-icon>
@@ -8,6 +8,7 @@
                 <div ng-message="required">This is required!</div>
             </div>
         </md-input-container>
+        
         <md-input-container class=" md-icon-float md-block" >
             <md-icon class="material-icons" >location_on</md-icon>
             <label>to</label>

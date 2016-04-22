@@ -6,10 +6,8 @@
         <h2>Identify Yourself</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
-          
           <md-icon class="material-icons" ng-click="cancel()" aria-label="Close dialog">clear</md-icon>
         </md-button>
-        
       </div>
     </md-toolbar>
     <md-dialog-content class="inputIcons" style="width:300px;max-width:400px;max-height:810px; margin:0px; padding:0px; ">
@@ -21,7 +19,6 @@
                 <md-input-container class="md-icon-float md-block"  >
                   <md-icon class="material-icons inputIcon email" >email</md-icon> 
                     <label> Email </label>
-                    
                     <input type="text" name="email" ng-model="email" required />
                     <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
                         <div ng-message="required">Enter your EmailID</div>
