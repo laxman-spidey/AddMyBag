@@ -48,28 +48,44 @@
             return finalString;
             
             
-        }
-        $scope.registerTheTravel = function(fromPlace,toPlace,datePreferred,weight)
+        };
+        
+        $scope.registerTheRequest = function(fromPlace,toPlace,datePreferred,weight)
         {
             console.log("register travel");
             var fromPlace = extractAddressComponents(fromPlace);
             var toPlace = extractAddressComponents(toPlace);
-            var dateString = getDateInSQLformat(datePreferred);
+            //var dateString = getDateInSQLformat(datePreferred);
             
             var request = {
                 from            : fromPlace,
                 to              : toPlace,
-                preferredDate   : dateString,
+                //preferredDate   : dateString,
                 weight          : weight,
                 userId          : 1
             };
             console.log(request);
-            FormService.insertTravelPost(request);
+            FormService.insertAddRequest(request);
         };
         
-        $scope.addRequest = function() {
-            
-        }
+        $scope.registerTheTravel = function()       
+        {
+            console.log("register travel");
+            var fromPlace = extractAddressComponents($scope.fromPlace);
+            var toPlace = extractAddressComponents($scope.toPlace);
+            var dateString = getDateInSQLformat($scope.dateOfArrival);
+            var request = {
+                from        : fromPlace,
+                to          : toPlace,
+                arrivalDate : dateString,
+                weight      : $scope.weight,
+                pricePerKg  : $scope.pricePerKg,
+                userId      : 1
+            };
+            console.log(request);
+            TravelFormService.insertTravelPost(request);
+        };
+        
         
         var base_url = window.location.origin;
         
@@ -142,6 +158,17 @@
         factory.insertTravelPost = function(request) {
             $http.post("index.php/Welcome/registerTheTravel", request)
                 .success(function(data, status, headers, config) {
+                    console.log("Travel registered");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("failure");
+                });
+        }
+        factory.insertAddRequest = function(request) {
+            $http.post("index.php/Welcome/registerTheRequest", request)
+                .success(function(data, status, headers, config) {
+                    console.log("request registerd");
                     console.log(data);
                 })
                 .error(function(data, status, headers, config) {
@@ -149,17 +176,8 @@
                 });
         }
         return factory;
-        factory.insertAddRequest = function(request) {
-            $http.post("index.php/Welcome/registerTheRequest", request)
-                .success(function(data, status, headers, config) {
-                    console.log(data);
-                })
-                .error(function(data, status, headers, config) {
-                    console.log("failure");
-                });
-        }
     }
     
-    FormService.$inject = ["$http"];
+    FormService.$inject = ["$http"]
     AddMyBag.service("FormService",FormService);
 })();

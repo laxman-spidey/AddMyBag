@@ -12,7 +12,7 @@
         <md-input-container class=" md-icon-float md-block" >
             <md-icon class="material-icons" >location_on</md-icon>
             <label>to</label>
-            <input type="text" g-places-autocomplete name="toPlaceAdd" ng-model="toPlace" required />
+            <input type="text" g-places-autocomplete name="toPlaceAdd" ng-model="toPlaceAdd" required />
             <div ng-messages="travelForm.toPlace.$error" ng-show="travelForm.toPlace.$dirty">
                 <div ng-message="required">This is required!</div>
             </div>
@@ -35,7 +35,7 @@
         </md-input-container>
         
         <div  layout-align="end">
-            <md-button  class="md-primary md-raised" ng-click='addRequest(fromPlaceAdd,toPlaceAdd,datePreferredAdd,weightAdd)'>Register the Travel</md-button>        
+            <md-button  class="md-primary md-raised" ng-click='registerTheRequest(fromPlaceAdd,toPlaceAdd,datePreferredAdd,weightAdd)'>Register the Request</md-button>        
         </div>
         
     </form>

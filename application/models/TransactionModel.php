@@ -17,8 +17,8 @@ class TransactionModel extends CI_Model {
         if($fromId == -1 || $toId == -1) {
             return -1;
         } else {
-            $travelPost["from_location"] = $fromId;
-            $travelPost["to_location"] = $toId;    
+            $addRequest["from_location"] = $fromId;
+            $addRequest["to_location"] = $toId;    
             $this->db->insert($this->ADD_REQUEST,$addRequest);
             return $this->db->insert_id();
         }

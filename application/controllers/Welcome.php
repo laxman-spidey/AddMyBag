@@ -169,7 +169,7 @@ class Welcome extends CI_Controller {
 		$request = json_decode($postdata);
 		$addReq = array();
 		$addReq['user_id'] = $request->userId;
-		$addReq['weight'] = $request->weight;
+		
 		if(isset($request->arrivalDate))
 		{
 			$addReq['date_time_of_arrival'] = $request->arrivalDate;	
@@ -198,8 +198,10 @@ class Welcome extends CI_Controller {
 		$request = json_decode($postdata);
 		$travel = array();
 		$travel['user_id'] = $request->userId;
-		$travel['available_weight'] = $request->weight;
-		$travel['price_per_kg'] = $request->pricePerKg;
+		if(isset($request->weight))
+		{
+			$travel['weight'] = $request->weight;	
+		}
 		if(isset($request->arrivalDate))
 		{
 			$travel['date_time_of_arrival'] = $request->arrivalDate;	
