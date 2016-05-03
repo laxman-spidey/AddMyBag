@@ -19,7 +19,14 @@ class SearchController extends CI_Controller {
 		$travels = $this->MatchFinder->searchTravels($request->from,$request->to);
 		if($travels != null)
 		{
-		    
+		    $response["success"] = "true";
+		    $response['data'] = array();
+		    $index = 0;
+		    foreach($travels as $travel)
+		    {
+		        $response['data'][$index] = $this->buildResponse($travel);
+		    }
+		    $response["count"] = $index;
 		}
 		else {
 		    $response["success"] = "true";
@@ -28,11 +35,32 @@ class SearchController extends CI_Controller {
 		
 	}
 	
-	private function buildTravelResponse($response)
+	private function buildResponse($data)
 	{
-	    $travel = array();
+	    $response = array();
+	    $response['postId'] = $data['postId'];
 	    
-	    return $travel;
+	    $response['from'] = array();
+	    $response['from']['formattedAddress'] = $data['fromAddress'];
+	    $response['from']['locationId'] = $data['fromId'];
+	    $response['from']['distance'] = $data['distance'];
+	    
+	    $response['to'] = array();
+	    $response['to']['formattedAddress'] = $data['toAddress'];
+	    $response['to']['locationId'] = $data['toId'];
+	    $response['to']['distance'] = $data['distance'];
+	    
+	    $response['user'] = array();
+	    $response['user']['user_id'] = $data['user_id'];
+	    $response['user']['firstName'] = $data['first_name'];
+	    $response['user']['lastName'] = $data['last_name'];
+	    $response['user']['rating'] = $data['rating'];
+	    
+	    $response['weight'] = $data['available_weight'];
+	    $response['price'] = $data['price_per_kg'];
+	    $response['comment'] = $data['comment'];
+	    
+ 	    return $response;
 	}
 }
 ?>

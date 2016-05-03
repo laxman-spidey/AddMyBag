@@ -32,7 +32,7 @@ class TransactionModel extends CI_Model {
             ->having('distance < 25') 
             ->order_by('distance')
             ->limit('0 , 20');
-        $query = $this->gdb->get();
+        $query = $this->db->get();
         if($query->num_rows() > 0)
         {
             return $query->result;
@@ -60,7 +60,7 @@ class TransactionModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id,from.formatted_address,to.location_id,to.formatted_address')
+        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.formatted_address as fromAddress,to.location_id as toId,to.formatted_address as toAddress')
             ->from($TRAVEL_POST." T")
             ->join($USER." U", "U.user_id = T.user_id")
             ->join($LOCATION." from","T.from_location = from.location_id")
@@ -96,7 +96,7 @@ class TransactionModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id,from.formatted_address,to.location_id,to.formatted_address')
+        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.formatted_address as fromAddress,to.location_id as toId,to.formatted_address as toAddress')
             ->from($ADD_REQUEST." T")
             ->join($USER." U", "U.user_id = T.user_id")
             ->join($LOCATION." from","T.from_location = from.location_id")
