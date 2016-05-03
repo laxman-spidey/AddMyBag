@@ -1,4 +1,3 @@
-
 <md-dialog ng-controller="AuthController" aria-label="Mango (Fruit)">
   <form>
     <md-toolbar>
@@ -11,95 +10,94 @@
       </div>
     </md-toolbar>
     <md-dialog-content class="inputIcons" style="width:300px;max-width:400px;max-height:810px; margin:0px; padding:0px; ">
-      <md-tabs md-disable-animation md-dynamic-height  md-stretch-tabs="always" md-border-bottom>
+      <md-tabs md-disable-animation md-dynamic-height md-stretch-tabs="always" md-border-bottom>
         <md-tab label="login">
-          <md-content  layout-margin>
+          <md-content layout-margin>
             <form no-validate name="userForm" class="no-margin">
-                
-                <md-input-container class="md-icon-float md-block"  >
-                  <md-icon class="material-icons inputIcon email" >email</md-icon> 
-                    <label> Email </label>
-                    <input type="text" name="email" ng-model="email" required />
-                    <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
-                        <div ng-message="required">Enter your EmailID</div>
-                    </div>
-                </md-input-container>
-                
-                <md-input-container class=" md-icon-float md-block" >
-                    
-                    <label>password</label>
-                    
-                    <input type="password" name="password" ng-model="password" required />
-                    <md-icon class="material-icons" >lock</md-icon>
-                    <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container >
-                <i  style="font-size:12px;color:red">**we recommend you to login with social account for extended security</i> 
-                <div  layout="row" layout-align="end" class="no-margin" >
-                  <md-input-container  class="md-block no-margin"> 
-									  <md-button class="md-primary md-raised" >Login</md-button>
-							    </md-input-container>  
+              <md-input-container class="md-icon-float md-block">
+                <md-icon class="material-icons inputIcon email">email</md-icon>
+                <label> Email </label>
+                <input type="text" name="email" ng-model="email" required /> 
+                <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
+                  <div ng-message="required">Enter your EmailID</div>
                 </div>
-                
+              </md-input-container>
+
+              <md-input-container class=" md-icon-float md-block">
+
+                <label>password</label>
+
+                <input type="password" name="password" ng-model="password" required />
+                <md-icon class="material-icons">lock</md-icon>
+                <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty">
+                  <div ng-message="required">This is required!</div>
+                </div>
+              </md-input-container>
+              <i style="font-size:12px;color:red">**we recommend you to login with social account for extended security</i>
+              <div layout="row" layout-align="end" class="no-margin">
+                <md-input-container class="md-block no-margin">
+                  <md-button class="md-primary md-raised">Login</md-button>
+                </md-input-container>
+              </div>
+
             </form>
           </md-content>
         </md-tab>
         <md-tab label="register">
           <md-content layout-margin>
-              <form no-validate name="userForm" class="no-margin">
-                
-                <md-input-container class="md-block" >
-                    <md-icon class="material-icons" >account_circle</md-icon>
-                    <label>First name</label>
-                    <input type="text" name="firstName" ng-model="firstName" required />
-                    <div ng-messages="userForm.firstName.$error" ng-show="userForm.firstName.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container >
-                
-                <md-input-container class="md-block" >
-                    <md-icon class="material-icons" >account_circle</md-icon>
-                    <label>Last Name</label>
-                    <input type="text" name="lastName" ng-model="lastName" required />
-                    <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container >
-                
-                <md-input-container class="md-block" >
-                    <md-icon class="material-icons" >email</md-icon>
-                    <label>Email</label>
-                    <input type="text" name="email" ng-model="email" required />
-                    <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
-                        <div ng-message="required">Enter your EmailID</div>
-                    </div>
-                </md-input-container>
-                
-                <md-input-container class="md-block" >
-                    <md-icon class="material-icons" >lock</md-icon>
-                    <label>password</label>
-                    <input type="password" name="password" ng-model="password" required />
-                    <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container >
-                
-                <md-input-container class="md-block" >
-                    <md-icon class="material-icons" >phone</md-icon>
-                    <label>phone</label>
-                    <input type="phone" name="tel" ng-model="phone" required />
-                    <div ng-messages="userForm.phone.$error" ng-show="userForm.phone.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container >
-                
-                <div  layout="row" layout-align="end" class="no-margin" >
-                  <md-input-container  class="md-block" > 
-									  <md-button class="md-raised md-primary" ng-click="register(email,password,firstName,lastName,phone)" >register</md-button>
-							    </md-input-container>  
+            <form no-validate name="userForm" class="no-margin">
+
+              <md-input-container class="md-block">
+                <md-icon class="material-icons">account_circle</md-icon>
+                <label>First name</label>
+                <input type="text" name="firstName" ng-model="firstName" required />
+                <div ng-messages="userForm.firstName.$error" ng-show="userForm.firstName.$dirty">
+                  <div ng-message="required">This is required!</div>
                 </div>
-                
+              </md-input-container>
+
+              <md-input-container class="md-block">
+                <md-icon class="material-icons">account_circle</md-icon>
+                <label>Last Name</label>
+                <input type="text" name="lastName" ng-model="lastName" required />
+                <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
+                  <div ng-message="required">This is required!</div>
+                </div>
+              </md-input-container>
+
+              <md-input-container class="md-block">
+                <md-icon class="material-icons">email</md-icon>
+                <label>Email</label>
+                <input type="text" name="email" ng-model="email" required />
+                <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
+                  <div ng-message="required">Enter your EmailID</div>
+                </div>
+              </md-input-container>
+
+              <md-input-container class="md-block">
+                <md-icon class="material-icons">lock</md-icon>
+                <label>password</label>
+                <input type="password" name="password" ng-model="password" required />
+                <div ng-messages="userForm.password.$error" ng-show="userForm.password.$dirty">
+                  <div ng-message="required">This is required!</div>
+                </div>
+              </md-input-container>
+
+              <md-input-container class="md-block">
+                <md-icon class="material-icons">phone</md-icon>
+                <label>phone</label>
+                <input type="phone" name="tel" ng-model="phone" required />
+                <div ng-messages="userForm.phone.$error" ng-show="userForm.phone.$dirty">
+                  <div ng-message="required">This is required!</div>
+                </div>
+              </md-input-container>
+
+              <div layout="row" layout-align="end" class="no-margin">
+                <md-input-container class="md-block">
+                  <md-button class="md-raised md-primary" ng-click="register(email,password,firstName,lastName,phone)">register</md-button>
+                </md-input-container>
+              </div>
+
             </form>
           </md-content>
         </md-tab>
@@ -195,7 +193,7 @@
   </div>
   <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div>
   -->
-    <!--
+<!--
     <link rel="stylesheet" href="Styles/style.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
     
@@ -203,7 +201,7 @@
              Because it is loaded asynchronously, it might take some time to load. 
              Place some loading notification, so user won't get confused. 
              You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. -->
-        <!--
+<!--
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 </div>
 </md-dialog>

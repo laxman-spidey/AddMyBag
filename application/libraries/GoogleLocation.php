@@ -22,10 +22,8 @@ class GoogleLocation
         $i=0;
         foreach ($this->levelLabels as $label)
         {
-            
             if($currentLevel == $label)
             {
-                
                 return $this->levelLabels[$i];
             }
             $i++;

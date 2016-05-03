@@ -83,7 +83,7 @@
                 userId      : 1
             };
             console.log(request);
-            TravelFormService.insertTravelPost(request);
+            FormService.insertTravelPost(request);
         };
         
         
