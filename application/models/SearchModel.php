@@ -32,7 +32,7 @@ class TransactionModel extends CI_Model {
             ->having('distance < 25') 
             ->order_by('distance')
             ->limit('0 , 20');
-        $query = $this->db->get();
+        $query = $this->gdb->get();
         if($query->num_rows() > 0)
         {
             return $query->result;
@@ -75,22 +75,43 @@ class TransactionModel extends CI_Model {
             return $query->result;
         }
         else{
-            return -1;
+            return null;
         }
     }
     public function getRequestsWith($fromIds,$toIds)
     {
-        $this->db->select('*')
-            ->from($TRAVEL_POST)
+        /**
+         * 
+         * SELECT   T.post_id, T.weight, T.comment,
+         *          U.user_id, U.first_name, U.last_name,
+         *          from.location_id, from.formatted_address,
+         *          to.location_id, to.formatted_address
+         * FROM     add_request T
+         * JOIN     user U          ON U.user_id = T.user_id
+         * JOIN     location from   ON from.location_id = T.from_location
+         * JOIN     location to     ON to.location_id   = T.to_location
+         * 
+         * WHERE    T.weight >= $weight
+         * AND      T.from_location IN ($fromIds)
+         * AND      T.to_location   IN ($toIds)
+         * 
+         */ 
+        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id,from.formatted_address,to.location_id,to.formatted_address')
+            ->from($ADD_REQUEST." T")
+            ->join($USER." U", "U.user_id = T.user_id")
+            ->join($LOCATION." from","T.from_location = from.location_id")
+            ->join($LOCATION." to","T.to_location = to.location_id")
+            ->where("weight <=","$weight")
             ->where_in('from',$fromIds)
-            ->and_where_in('to',$toIds)
+            ->where_in('to',$toIds)
+           
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
             return $query->result;
         }
         else{
-            return -1;
+            return null;
         }
     }
 }
