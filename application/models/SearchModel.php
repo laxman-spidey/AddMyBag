@@ -1,24 +1,34 @@
 <?php
-class TransactionModel extends CI_Model {
+class SearchModel extends CI_Model {
     private $TRAVEL_POST = "travel_post";
     private $ADD_REQUEST = "add_request";
     private $LOCATION = "location";
     private $USER = "user";
     
+    public function __construct()
+    {
+        $this->load->database();
+    }
+    
     public function getLocations($locality)
     {
-        $this->db->select('location_id')->from($LOCATION)->where('locality',$locality);
+        $this->db->select('location_id')->from($this->LOCATION)->where('locality',$locality);
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $query->result;
+            $locationIds = array();
+            foreach($query->result() as $row)
+            {
+                array_push($locationIds, $row->location_id);
+            }
+            return $locationIds;
         }
         else {
             
         }
     }
     
-    public function getLocations($lat, $lng, $country)
+    public function getLocationsLatLng($lat, $lng, $country)
     {
         /**
         *   Source: https://developers.google.com/maps/articles/phpsqlsearch_v3?csw=1#finding-locations-with-mysql        
@@ -28,14 +38,14 @@ class TransactionModel extends CI_Model {
         **/
         
         $this->db->select(" location_id, ( 6371 * acos( cos( radians($lat) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians($lng) ) + sin( radians($lat) ) * sin( radians( lat ) ) ) ) AS distance ")
-            ->from($LOCATION)
+            ->from($this->LOCATION)
             ->having('distance < 25') 
             ->order_by('distance')
             ->limit('0 , 20');
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $query->result;
+            return $query->result();
         }
         else {
             return null;
@@ -60,21 +70,22 @@ class TransactionModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.formatted_address as fromAddress,to.location_id as toId,to.formatted_address as toAddress')
-            ->from($TRAVEL_POST." T")
-            ->join($USER." U", "U.user_id = T.user_id")
-            ->join($LOCATION." from","T.from_location = from.location_id")
-            ->join($LOCATION." to","T.to_location = to.location_id")
+        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,to.location_id as toId,to.address as toAddress')
+            ->from($this->TRAVEL_POST." T")
+            ->join($this->USER." U", "U.user_id = T.user_id")
+            ->join($this->LOCATION." from","T.from_location = from.location_id")
+            ->join($this->LOCATION." to","T.to_location = to.location_id")
             ->where("available_weight >=","$weight")
-            ->where_in('from',$fromIds)
-            ->where_in('to',$toIds)
+            ->where_in('from_location',$fromIds)
+            ->where_in('to_location',$toIds);
             
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $query->result;
+            return $query->result();
         }
-        else{
+        else
+        {
             return null;
         }
     }
@@ -96,19 +107,19 @@ class TransactionModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.formatted_address as fromAddress,to.location_id as toId,to.formatted_address as toAddress')
-            ->from($ADD_REQUEST." T")
-            ->join($USER." U", "U.user_id = T.user_id")
-            ->join($LOCATION." from","T.from_location = from.location_id")
-            ->join($LOCATION." to","T.to_location = to.location_id")
+        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,to.location_id as toId,to.address as toAddress')
+            ->from($this->ADD_REQUEST." T")
+            ->join($this->USER." U", "U.user_id = T.user_id")
+            ->join($this->LOCATION." from_","T.from_location = from.location_id")
+            ->join($this->LOCATION." to","T.to_location = to.location_id")
             ->where("weight <=","$weight")
-            ->where_in('from',$fromIds)
-            ->where_in('to',$toIds)
+            ->where_in('from_location',$fromIds)
+            ->where_in('to_location',$toIds);
            
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            return $query->result;
+            return $query->result();
         }
         else{
             return null;

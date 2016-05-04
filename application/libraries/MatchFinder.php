@@ -1,24 +1,25 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 /**
  * Module : Search
  * 
  */
 class MatchFinder
 {
-    private $searchModel;
-    private $fromLocations;
-    private $toLocations;
+    var $searchModel;
+    var $fromLocations;
+    var $toLocations;
     /**
      * this class requires few models to get data from database
      */
-    public function __construct($searchModel)
+    public function __construct($params)
     {
-        $this->searchModel = $searchModel;
+        $this->searchModel = $params['searchModel'];
     }
     public function getLocations($from, $to)
     {
         $this->fromLocations = $this->searchModel->getLocations($from->locality);
         $this->toLocations = $this->searchModel->getLocations($to->locality);
+        //var_dump($this->fromLocations);
         if($this->fromLocations != null && $this->toLocations != null)
         {
             return true;
@@ -36,12 +37,12 @@ class MatchFinder
         }
     }
     
-    public function searchRequests($from, $to)
+    public function searchRequests($from, $to, $weight=0)
     {
         $success = $this->getLocations($from,$to);
         if($success == true)
         {
-            $requests = $this->searchModel->getRequestsWith($this->fromLocations,$this->toLocations);
+            $requests = $this->searchModel->getRequestsWith($this->fromLocations,$this->toLocations,$weight);
             if(requests != null)
             {
                 return $requests;
@@ -53,13 +54,13 @@ class MatchFinder
         }
     }
     
-    public function searchTravels($from, $to)
+    public function searchTravels($from, $to, $weight=0)
     {
         $success = $this->getLocations($from,$to);
         if($success == true)
         {
-            $travels = $this->searchModel->getTravelsWith($this->fromLocations,$this->toLocations);
-            if(requests != null)
+            $travels = $this->searchModel->getTravelsWith($this->fromLocations,$this->toLocations,$weight);
+            if($travels != null)
             {
                 return $travels;
             }

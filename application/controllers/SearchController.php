@@ -11,12 +11,14 @@ class SearchController extends CI_Controller {
 		$to = $request->to;
 		
 		$this->load->model('SearchModel');
-		$this->load->library('MatchFinder',$this->SearchModel);
+		$params = array();
+		$params['searchModel'] = $this->SearchModel;
+		$this->load->library('MatchFinder',$params);
 		
 		
 		$response = array();
 		
-		$travels = $this->MatchFinder->searchTravels($request->from,$request->to);
+		$travels = $this->matchfinder->searchTravels($request->from,$request->to);
 		if($travels != null)
 		{
 		    $response["success"] = "true";
@@ -25,6 +27,7 @@ class SearchController extends CI_Controller {
 		    foreach($travels as $travel)
 		    {
 		        $response['data'][$index] = $this->buildResponse($travel);
+		        $index++;
 		    }
 		    $response["count"] = $index;
 		}
@@ -32,33 +35,34 @@ class SearchController extends CI_Controller {
 		    $response["success"] = "true";
 		    $response["count"] = "0";
 		}
+		echo json_encode($response);
 		
 	}
 	
 	private function buildResponse($data)
 	{
 	    $response = array();
-	    $response['postId'] = $data['postId'];
+	    $response['postId'] = $data->post_id;
 	    
 	    $response['from'] = array();
-	    $response['from']['formattedAddress'] = $data['fromAddress'];
-	    $response['from']['locationId'] = $data['fromId'];
-	    $response['from']['distance'] = $data['distance'];
+	    $response['from']['formattedAddress'] = $data->fromAddress;
+	    $response['from']['locationId'] = $data->fromId;
+	    //$response['from']['distance'] = $data->distance;
 	    
 	    $response['to'] = array();
-	    $response['to']['formattedAddress'] = $data['toAddress'];
-	    $response['to']['locationId'] = $data['toId'];
-	    $response['to']['distance'] = $data['distance'];
+	    $response['to']['formattedAddress'] = $data->toAddress;
+	    $response['to']['locationId'] = $data->toId;
+	    //$response['to']['distance'] = $data->distance;
 	    
 	    $response['user'] = array();
-	    $response['user']['user_id'] = $data['user_id'];
-	    $response['user']['firstName'] = $data['first_name'];
-	    $response['user']['lastName'] = $data['last_name'];
-	    $response['user']['rating'] = $data['rating'];
+	    $response['user']['user_id'] = $data->user_id;
+	    $response['user']['firstName'] = $data->first_name;
+	    $response['user']['lastName'] = $data->last_name;
+	    //$response['user']['rating'] = $data->rating;
 	    
-	    $response['weight'] = $data['available_weight'];
-	    $response['price'] = $data['price_per_kg'];
-	    $response['comment'] = $data['comment'];
+	    $response['weight'] = $data->available_weight;
+	    $response['price'] = $data->price_per_kg;
+	    $response['comment'] = $data->comment;
 	    
  	    return $response;
 	}

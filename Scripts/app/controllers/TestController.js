@@ -1,6 +1,6 @@
 "use strict";
 (function () {
-    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog) {
+    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog, $http) {
         var base_url = window.location.origin;
         
         $scope.dateOfArrival = new Date();
@@ -18,6 +18,7 @@
                 console.log("coming into close");
                 $mdDialog.cancel();
         }
+        
         $scope.showTabDialog = function(ev) {
             $mdDialog.show({
                 controller: DialogController,
@@ -31,6 +32,52 @@
                     $scope.status = 'You cancelled the dialog.';
             });
             
+        };
+        
+        $scope.TravelsResult = "result will be shown here";
+        $scope.searchTravels = function()
+        {
+            
+            var fromPlace = extractAddressComponents($scope.fromPlace);
+            var toPlace = extractAddressComponents($scope.toPlace);
+            var request = {
+                from    : fromPlace,
+                to      : toPlace
+            };
+            $http.post("index.php/SearchController/searchTravels", request)
+                .success(function(data, status, headers, config) {
+                    console.log("search data");
+                    console.log(data);
+                    $scope.TravelsResult = data;
+                    
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("failure");
+                });
+        }
+        
+        var extractAddressComponents = function(responseFromGoogle)
+        {
+            console.log(responseFromGoogle);
+            var location = {};
+            location.type               = responseFromGoogle.types[0];
+            location.place_id           = responseFromGoogle.place_id;
+            location.formatted_address  = responseFromGoogle.formatted_address;
+            location.latitude           = responseFromGoogle.geometry.location.lat();
+            location.longitude          = responseFromGoogle.geometry.location.lng();
+            var comp;
+            for(comp of responseFromGoogle.address_components)
+            {
+                if(    comp.types[0] === 'locality' 
+                    || comp.types[0] === 'country' 
+                    || comp.types[0] === 'administrative_area_level_2' 
+                    || comp.types[0] === 'administrative_area_level_1' 
+                    || comp.types[0] === 'postal_code')
+                {
+                    location[comp.types[0]] = comp.long_name;
+                }
+            }    
+            return location;
         };
         
         $scope.showPlace = function()
@@ -66,7 +113,7 @@
         };
     }
 
-    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog"];
+    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http"];
     AddMyBag.controller("testController",testController);
     
     

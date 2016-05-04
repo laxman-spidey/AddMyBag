@@ -42,9 +42,13 @@
                 
                 
                 
-                <md-button  class="md-primary md-raised" ng-click='showPlace()'  >Search</md-button>    
+                <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
             </form>
+            <md-whiteframe class="md-whiteframe-4dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" style="height:500px" layout layout-align="center center">
+                <span>{{TravelsResult}}</span>
+            </md-whiteframe>
         </md-content>
+        <!--
         <div >
             <div >
                 <div ng-include="'/index.php/Welcome/AddRequestPartial'"></div>    
@@ -53,7 +57,7 @@
                 <div ng-include="'/index.php/Welcome/TravelPostPartial'"></div>    
             </div>
         </div>
-        
+        -->
     </body>
     
     <style type="text/css">
