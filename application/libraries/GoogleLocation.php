@@ -31,7 +31,7 @@ class GoogleLocation
     }
     public function getDistanceBetweenTwoPlaces($xLat,$xLng,$yLat,$yLng)
     {
-           return distance($xLat,$xLng,$yLat,$yLng,'K');
+           return round($this->distance($xLat,$xLng,$yLat,$yLng,'K'),1);
     }
     
     /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
@@ -61,8 +61,8 @@ class GoogleLocation
     /*::         GeoDataSource.com (C) All Rights Reserved 2015		   		     :*/
     /*::                                                                         :*/
     /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    function distance($lat1, $lon1, $lat2, $lon2, $unit) {
-    
+    private function distance($lat1, $lon1, $lat2, $lon2, $unit) 
+    {
         $theta = $lon1 - $lon2;
         $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
         $dist = acos($dist);

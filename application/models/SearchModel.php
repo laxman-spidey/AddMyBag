@@ -70,7 +70,7 @@ class SearchModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,to.location_id as toId,to.address as toAddress')
+        $this->db->select('T.post_id,T.available_weight,T.price_per_kg,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,from.lat as fromLat, from.lng as fromLng, to.location_id as toId,to.address as toAddress, to.lat as toLat, to.lng as toLng')
             ->from($this->TRAVEL_POST." T")
             ->join($this->USER." U", "U.user_id = T.user_id")
             ->join($this->LOCATION." from","T.from_location = from.location_id")
@@ -107,7 +107,7 @@ class SearchModel extends CI_Model {
          * AND      T.to_location   IN ($toIds)
          * 
          */ 
-        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,to.location_id as toId,to.address as toAddress')
+        $this->db->select('T.post_id,T.weight,T.comment,U.user_id,U.first_name,U.last_name,from.location_id as fromId,from.address as fromAddress,from.lat as fromLat, from.lng as fromLng, to.location_id as toId,to.address as toAddress, to.lat as toLat, to.lng as toLng')
             ->from($this->ADD_REQUEST." T")
             ->join($this->USER." U", "U.user_id = T.user_id")
             ->join($this->LOCATION." from_","T.from_location = from.location_id")

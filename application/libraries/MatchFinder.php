@@ -6,6 +6,7 @@
 class MatchFinder
 {
     var $searchModel;
+    var $googleLocation;
     var $fromLocations;
     var $toLocations;
     /**
@@ -14,12 +15,14 @@ class MatchFinder
     public function __construct($params)
     {
         $this->searchModel = $params['searchModel'];
+        $this->googleLocation = $params['googlelocation'];
     }
     public function getLocations($from, $to)
     {
         $this->fromLocations = $this->searchModel->getLocations($from->locality);
         $this->toLocations = $this->searchModel->getLocations($to->locality);
         //var_dump($this->fromLocations);
+        
         if($this->fromLocations != null && $this->toLocations != null)
         {
             return true;

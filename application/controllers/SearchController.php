@@ -11,8 +11,10 @@ class SearchController extends CI_Controller {
 		$to = $request->to;
 		
 		$this->load->model('SearchModel');
+		$this->load->library('GoogleLocation');
 		$params = array();
 		$params['searchModel'] = $this->SearchModel;
+		$params['googlelocation'] = $this->googlelocation;
 		$this->load->library('MatchFinder',$params);
 		
 		
@@ -27,6 +29,8 @@ class SearchController extends CI_Controller {
 		    foreach($travels as $travel)
 		    {
 		        $response['data'][$index] = $this->buildResponse($travel);
+		        $response['data'][$index]['from']['distance'] = $this->googlelocation->getDistanceBetweenTwoPlaces($travel->fromLat,$travel->fromLng,$request->from->latitude,$request->from->longitude);
+		        $response['data'][$index]['to']['distance'] = $this->googlelocation->getDistanceBetweenTwoPlaces($travel->toLat,$travel->toLng,$request->to->latitude,$request->to->longitude);
 		        $index++;
 		    }
 		    $response["count"] = $index;
@@ -47,12 +51,11 @@ class SearchController extends CI_Controller {
 	    $response['from'] = array();
 	    $response['from']['formattedAddress'] = $data->fromAddress;
 	    $response['from']['locationId'] = $data->fromId;
-	    //$response['from']['distance'] = $data->distance;
 	    
 	    $response['to'] = array();
 	    $response['to']['formattedAddress'] = $data->toAddress;
 	    $response['to']['locationId'] = $data->toId;
-	    //$response['to']['distance'] = $data->distance;
+	    
 	    
 	    $response['user'] = array();
 	    $response['user']['user_id'] = $data->user_id;
