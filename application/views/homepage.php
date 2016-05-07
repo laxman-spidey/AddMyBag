@@ -21,32 +21,68 @@
             </span>
         </md-toolbar>
         <md-content>
-            <form class="inputIcons" no-validate name="searchForm">
-                
-                <md-input-container>
-                    <md-icon class="material-icons" >location_on</md-icon>
-                    <label>from</label>
-                    <input type="text" g-places-autocomplete name="fromPlace" ng-model="fromPlace" required />
-                    <div ng-messages="searchForm.fromPlace.$error" ng-show="searchForm.fromPlace.$dirty">
-                        <div ng-message="required">This is required!</div>
+            <div class="container"  >
+                <form class="inputIcons" no-validate name="searchForm">
+                    
+                    <md-input-container>
+                        <md-icon class="material-icons" >location_on</md-icon>
+                        <label>from</label>
+                        <input type="text" g-places-autocomplete name="fromPlace" ng-model="fromPlace" required />
+                        <div ng-messages="searchForm.fromPlace.$error" ng-show="searchForm.fromPlace.$dirty">
+                            <div ng-message="required">This is required!</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-icon class="material-icons" >location_on</md-icon>
+                        <label>to</label>
+                        <input type="text" g-places-autocomplete name="toPlace" ng-model="toPlace" required />
+                        <div ng-messages="searchForm.toPlace.$error" ng-show="searchForm.toPlace.$dirty">
+                            <div ng-message="required">This is required!</div>
+                        </div>
+                    </md-input-container>
+                    
+                    
+                    
+                    <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
+                </form>
+                <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp"  layout-margin layout="column">
+                    <div  layout="row" layout-margin  flex>
+                            <div layout layout-align="center center">
+                                <md-icon  class="material-icons">location_on</md-icon>
+                                <div class="md-primary" flex>{{item.from.formattedAddress}}</div>
+                            </div>
+                            <div layout layout-align="center center" flex="100" >
+                                <md-icon   class="material-icons">location_on</md-icon>
+                                <div class="md-primary"  flex>{{item.to.formattedAddress}}</div>
+                            </div>
+                            <div layout layout-align="center center">
+                                <md-icon  class="material-icons">attach_money</md-icon>     
+                                <div  class="md-primary" flex>{{item.price}}</div>
+                            </div>
+                            <div layout layout-align="center center">
+                                <md-icon   class="material-icons" >business_center</md-icon>
+                                <div class="md-primary"  flex>{{item.weight}}</div>
+                            </div>
+                       </div>
+                       <div layout="row" style="height:50px">
+                        <div layout layout-align="center center">
+                             <md-icon   class="material-icons" >location_on</md-icon>
+                             <div  class="md-primary"  flex>{{item.user.firstName}} {{item.user.lastName}} </div>
+                        </div>
+                        <div layout layout-align="center center">
+                             
+                             <md-icon  class="material-icons" >location_on</md-icon>
+                             <div class="md-primary"  flex>Travelling Date</div>
+                        </div>
+                       
+                        
+                    </div>  
+                    <div class="container" layout="row"  >
+                        
+                        <md-button class="md-primary md-raised" flex-end="20">request </md-button>
                     </div>
-                </md-input-container>
-                <md-input-container>
-                    <md-icon class="material-icons" >location_on</md-icon>
-                    <label>to</label>
-                    <input type="text" g-places-autocomplete name="toPlace" ng-model="toPlace" required />
-                    <div ng-messages="searchForm.toPlace.$error" ng-show="searchForm.toPlace.$dirty">
-                        <div ng-message="required">This is required!</div>
-                    </div>
-                </md-input-container>
-                
-                
-                
-                <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
-            </form>
-            <md-whiteframe class="md-whiteframe-4dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" style="height:500px" layout layout-align="center center">
-                <span>{{TravelsResult}}</span>
-            </md-whiteframe>
+                </md-whiteframe>
+            </div>
         </md-content>
         <!--
         <div >
