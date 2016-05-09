@@ -9,18 +9,18 @@
     <body flex ng-app="AddMyBag" ng-controller='testController' ng-cloak>
         <md-toolbar layout="row" class="md-medium-tall "   layout-align="space-between center">
             <span layout-padding>
-                <h1 layout="column" class="md-primary">AddMyBag</h1>
+                <h1 class="md-primary">AddMyBag</h1>
             </span>
-            <span ng-controller='AuthController'>
+            <span layout="row" layout-align="center center" ng-controller='AuthController'>
                 
-                <md-button layout="column" ng-click="showTabDialog($event)" aria-label="login" class="md-primary" ng-click='showPlace()' >Log in</md-button> 
+                <md-button ng-click="showTabDialog($event)" aria-label="login" class="md-primary" >Log in</md-button> 
                 
-                <md-button layout="column" layout-align="center" style="" aria-label="Google" >
-                    <img src="img/gplus.png" style="width:24px;height:24p" ></img>
-                </md-button>
-                <md-button layout="column"  class="fb-login-button md-icon-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1"  ng-click="fbLogin()" layout-align="center" >
-                    <img src="img/fb.png"   aria-label="facebook" style="width:24px;height:24p"></img>
-                    
+                <span id="googleSignIn"  style="width:200px">
+                    <span id="signInButton"></span>
+                  </span>
+                <google-plus-signin autorender="false" buttontype='icon' clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com" />
+                <md-button style="width:24px;height:24px"  layout="column"  class="fb-login-button md-icon-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1"  ng-click="fbLogin()" layout-align="center" >
+                    <img src="img/fb.png"   aria-label="facebook" style="width:24px;height:24p;margin-right:10px"></img>
                 </md-button>
             </span>
         </md-toolbar>

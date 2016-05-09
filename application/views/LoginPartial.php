@@ -9,7 +9,7 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-dialog-content class="inputIcons" style="width:300px;max-width:400px;max-height:810px; margin:0px; padding:0px; ">
+    <md-dialog-content class="inputIcons" style="width:315px;max-width:400px;max-height:810px; margin:0px; padding:0px; ">
       <md-tabs md-disable-animation md-dynamic-height md-stretch-tabs="always" md-border-bottom>
         <md-tab label="login">
           <md-content layout-margin>
@@ -44,17 +44,16 @@
                   <span id="googleSignIn" style="width:200px">
                     <span id="signInButton"></span>
                   </span>
-                      <google-plus-signin autorender="true"  clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com">
-                    
+                  <google-plus-signin autorender="false" buttontype='text' clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com" />
+                  <md-button style="background-color:#3b5998;width:250px;height:40px" ng-click="fbLogin()"  class=" md-raised fb-login-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1" >
+                    <div layout="row" layout-align="center center">
+                      <img src="img/fb.png"  aria-label="facebook" style="width:24px;height:24p" ></img>
+                      <span style="color:#FFFFFF" class="tolowercase">sign in with facebook</span>
+                    </div>
+                  </md-button>      
                 
               </div>
-              <md-button style="background-color:#3b5998;width:250px;height:40px" ng-click="fbLogin()"  class=" md-raised fb-login-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1" >
-                <div layout="row" layout-align="center center">
-                  <img src="img/fb.png"  aria-label="facebook" style="width:24px;height:24p" ></img>
-                  <span style="color:#FFFFFF" class="tolowercase">sign in with facebook</span>
-
-                </div>
-              </md-button>
+              
               
               
 

@@ -165,7 +165,14 @@ class Welcome extends CI_Controller {
 	 		'type'  	=> $type,
 	 		'accessToken' => $accessToken
 	 	);
+	 	
 	 	$this->session->set_userdata($data);
+	 	session_write_close();
+	}
+	
+	public function logout()
+	{
+		$this->session->sess_destroy();
 	}
 	public function LoginPartial()
 	{
