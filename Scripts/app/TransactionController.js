@@ -1,93 +1,21 @@
 "use strict";
-var AuthModule = angular.module("AuthModule", ['ngRoute']);
 (function () {
     
-    //Definition for Authorization Controller
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
-        console.log("entered controller");
-        var RESPONSE_CODE = {
-            // login response codes
-            LOGIN_SUCCESS : 100,
-            EMAIL_DOES_NOT_EXISTS :101,
-            WRONG_PASSWORD : 102,
-            
-            //registration response codes
-            REGISTER_SUCCESS : 103,
-            EMAIL_ALREADY_TAKEN : 104
-        };
-        //FbAuthService.loadSDK(document);        
-        FbAuthService.initialize();
-        
-        $scope.fbLogin = function()
+    //Definition for Transaction Controller
+    var TransactionController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
+        this.request(requestItem)
         {
-            console.log("dhflakhfjdkaskh")
-            FbAuthService.login();   
+            
         }
-        //GplusAuthService.initialize();
-        $scope.cancel = function()
+        
+        this.travelPost(postItem)
         {
-            console.log("close function");
-            $mdDialog.cancel();
+            
         }
-        $scope.register = function(email,password,firstName,lastName,phoneNumber)
-        {
-            console.log('register');
-            UserService.register(email,password,firstName,lastName,phoneNumber, RESPONSE_CODE, onResponseRecieved);
-            
-        };
         
-        this.login = function(email,password)
-        {
-            UserService.appLogin(email, password, RESPONSE_CODE, onResponseRecieved);
-        };
-        
-        $rootScope.$on('$includeContentLoaded', function(event){
-            $rootScope.$broadcast("event:LoginModuleLoaded");
-            console.log("include content loaded");
-            registerSwitchForms();
-        });
-        $scope.$on("event:google-plus-signin-success", function(event, authResponse) {
-            console.log(authResponse);             
-            var request = {
-                email : authResponse.wc.hg,
-                firstName : authResponse.wc.Za,
-                lastName : authResponse.wc.Na,
-            };
-            //UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
-            
-        });        
-        var onResponseRecieved = function(response, responseCode)
-        {
-            if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
-            {
-                UserService.userId = response.userId;
-                //$scope.$broadcast('onSuccessfulLogin');
-                console.log("success :"+ responseCode);
-            }
-            else
-            {
-                //$scope.$broadcast('onFailure',{responseCode: responseCode});
-                console.log("failed: " + responseCode);
-            }
-        };
-
-        var registerSwitchForms = function()
-        {
-            $('.toggle').click(function(){
-                // Switches the Icon
-                $(this).children('i').toggleClass('fa-pencil');
-                // Switches the forms
-                $('.form').animate({
-                    height: "toggle",
-                    'padding-top': 'toggle',
-                    'padding-bottom': 'toggle',
-                    opacity: "toggle"
-                }, "slow");
-            });
-        };
     }; 
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"]
-    AuthModule.controller("AuthController",AuthController);
+    TransactionController$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"];
+    AddMyBag.controller("TransactionController(",TransactionController);
 
 
     /*************************************************************************
@@ -142,7 +70,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         
         factory.initialize = function()
         {
-            factory.loadSDK(document);
+            loadSDK(document);
             $window.fbAsyncInit = function() {
                 FB.init({
                     //appId: '829664043829221', // production app
@@ -160,7 +88,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         };
         
         //Load SDK from Facebook and create a fb signin button
-        factory.loadSDK = function(d) {
+        var loadSDK = function(d) {
             var js,
             id = 'facebook-jssdk',
             ref = d.getElementsByTagName('script')[0];
@@ -172,7 +100,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             js = d.createElement('script');
             js.id = id;
             js.async = true;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
+            js.src = "//connect.facebook.net/en_US/all.js";
 
             //insert fb login button
             ref.parentNode.insertBefore(js, ref);
@@ -193,11 +121,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 }
             });
         };
-        factory.login = function()
-        {
-            console.log("fb login")
-            var fbObject = FB.login(factory.getUserInfo())
-        }
+
         factory.getUserInfo = function(){
             var userid;
             FB.api('/me', 'get', {fields: 'id,name,gender,email' }, function(response) {
@@ -309,8 +233,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 firstName : firstName,
                 lastName : lastName,
                 phoneNumber : phoneNumber,
-                responseCode : RESPONSE_CODE,
-                LOGIN_VIA_APP : user.LOGIN_VIA_APP
+                responseCode : RESPONSE_CODE
             };
              ServerInterface.register(request, onResponseRecieved);
         };

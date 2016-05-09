@@ -7,23 +7,36 @@
         
     </head>
     <body flex ng-app="AddMyBag" ng-controller='testController' ng-cloak>
-        <md-toolbar layout="row" class="md-medium-tall "  layout-align="space-between center">
+        <md-toolbar layout="row" class="md-medium-tall "   layout-align="space-between center">
             <span layout-padding>
                 <h1 layout="column" class="md-primary">AddMyBag</h1>
             </span>
-            <span>
+            <span ng-controller='AuthController'>
+                
                 <md-button layout="column" ng-click="showTabDialog($event)" aria-label="login" class="md-primary" ng-click='showPlace()' >Log in</md-button> 
                 
                 <md-button layout="column" layout-align="center" style="" aria-label="Google" >
                     <img src="img/gplus.png" style="width:24px;height:24p" ></img>
                 </md-button>
-                <md-button layout="column" layout-align="center" ><img src="img/fb.png" aria-label="facebook" style="width:24px;height:24p"></img></md-button>
+                <md-button layout="column"  class="fb-login-button md-icon-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1"  ng-click="fbLogin()" layout-align="center" >
+                    <img src="img/fb.png"   aria-label="facebook" style="width:24px;height:24p"></img>
+                    
+                </md-button>
             </span>
         </md-toolbar>
-        <md-content>
-            <div class="container"  >
-                <form class="inputIcons" no-validate name="searchForm">
-                    
+        <md-content layout-padding layout="column" layout-align="center center">
+            
+            
+            
+            <div class="stats" >
+                <h1></h1>
+            </div>
+            <div class="container" >
+                <div>
+                    <span layout-margin class="md-primary">Find a traveller</span> 
+                </div>
+                <form class="inputIcons" no-validate name="searchForm" layout="row" layout-align="center center">
+                       
                     <md-input-container>
                         <md-icon class="material-icons" >location_on</md-icon>
                         <label>from</label>
@@ -45,7 +58,7 @@
                     
                     <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
                 </form>
-                <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp"  layout-margin layout="column">
+                <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp" layout-padding layout-margin layout="column">
                     <div  layout="row" layout-margin  flex>
                             <div layout layout-align="center center">
                                 <md-icon  class="material-icons">location_on</md-icon>
@@ -97,6 +110,12 @@
     </body>
     
     <style type="text/css">
+    
+    .tolowercase {
+        text-transform: lowercase;
+    }
+
+    
       .inputIcons {
         /*
         
@@ -161,5 +180,7 @@
     <!-- Google Maps library -->    
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script type="text/javascript" src="/Scripts/components/angular-google-places-autocomplete/src/autocomplete.js"></script>    
+    
+      
 </html>
 

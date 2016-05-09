@@ -88,6 +88,17 @@ class Welcome extends CI_Controller {
 		{
 		
 		}
+		//session establishment if logged in successfully
+		if($response['success'] == true)
+		{
+			$accessToken = null;
+			if(isset($request->accessToken))
+			{
+				$accessToken = $request->accessToken;
+			}
+			$this->establishSession($response['userId'],$request->loggedVia, $accessToken);
+			
+		}
 		
 		echo json_encode($response);
 		
@@ -141,10 +152,21 @@ class Welcome extends CI_Controller {
 			$userId = $this->UserModel->insertUser($data);
 			$response['userId'] = $userId;
 			$response['responseCode'] = $request->responseCode->REGISTER_SUCCESS;
+			$this->establishSession($userId, $request->LOGIN_VIA_APP, null);
+			
 		}
 		echo json_encode($response);
 	}
-	
+	public function establishSession($userId, $type, $accessToken = null)
+	{
+	 	$this->load->library('session');
+	 	$data = array(
+	 		'userId'	=> $userId,
+	 		'type'  	=> $type,
+	 		'accessToken' => $accessToken
+	 	);
+	 	$this->session->set_userdata($data);
+	}
 	public function LoginPartial()
 	{
 		$this->load->view('LoginPartial');

@@ -1,6 +1,6 @@
 "use strict";
 (function () {
-    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog, $http) {
+    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog, $http, FbAuthService) {
         var base_url = window.location.origin;
         
         $scope.dateOfArrival = new Date();
@@ -25,6 +25,7 @@
                 templateUrl: 'index.php/Welcome/LoginPartial', 
                 parent: angular.element(document.body),
                 targetEvent: ev,
+                onComplete: onShowDialog,
                 clickOutsideToClose:true
             }).then(function(answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
@@ -33,6 +34,12 @@
             });
             
         };
+        
+        var onShowDialog = function()
+        {
+            console.log("loading fb")
+            //FbAuthService.initialize();
+        }
         
         $scope.TravelsResult = "result will be shown here";
         $scope.searchTravels = function()
@@ -113,7 +120,7 @@
         };
     }
 
-    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http"];
+    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http","FbAuthService"];
     AddMyBag.controller("testController",testController);
     
     

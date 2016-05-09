@@ -13,7 +13,7 @@
       <md-tabs md-disable-animation md-dynamic-height md-stretch-tabs="always" md-border-bottom>
         <md-tab label="login">
           <md-content layout-margin>
-            <form no-validate name="userForm" class="no-margin">
+            <form no-validate name="userForm" class="no-margin" flex>
               <md-input-container class="md-icon-float md-block">
                 <md-icon class="material-icons inputIcon email">email</md-icon>
                 <label> Email </label>
@@ -33,12 +33,30 @@
                   <div ng-message="required">This is required!</div>
                 </div>
               </md-input-container>
-              <i style="font-size:12px;color:red">**we recommend you to login with social account for extended security</i>
               <div layout="row" layout-align="end" class="no-margin">
                 <md-input-container class="md-block no-margin">
-                  <md-button class="md-primary md-raised">Login</md-button>
+                  <md-button class="md-primary md-raised" >Login</md-button>
                 </md-input-container>
               </div>
+              ______________________________
+              <div>
+                  <i style="font-size:12px;color:red">**we recommend you to login with social account for extended security</i>
+                  <span id="googleSignIn" style="width:200px">
+                    <span id="signInButton"></span>
+                  </span>
+                      <google-plus-signin autorender="true"  clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com">
+                    
+                
+              </div>
+              <md-button style="background-color:#3b5998;width:250px;height:40px" ng-click="fbLogin()"  class=" md-raised fb-login-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1" >
+                <div layout="row" layout-align="center center">
+                  <img src="img/fb.png"  aria-label="facebook" style="width:24px;height:24p" ></img>
+                  <span style="color:#FFFFFF" class="tolowercase">sign in with facebook</span>
+
+                </div>
+              </md-button>
+              
+              
 
             </form>
           </md-content>

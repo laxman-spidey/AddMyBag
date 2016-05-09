@@ -52,7 +52,7 @@ class SearchModel extends CI_Model {
         }
     }
     
-    public function getTravelsWith($fromIds,$toIds, $weight)
+    public function getTravelsWith($fromIds,$toIds, $weight, $date = null)
     {
         /**
          * 
@@ -78,6 +78,11 @@ class SearchModel extends CI_Model {
             ->where("available_weight >=","$weight")
             ->where_in('from_location',$fromIds)
             ->where_in('to_location',$toIds);
+        if($date != null)
+        {
+            $this->db->where('preferred_time_of_arrival <',$date);
+        }
+        
             
         $query = $this->db->get();
         if($query->num_rows() > 0)
@@ -115,7 +120,15 @@ class SearchModel extends CI_Model {
             ->where("weight <=","$weight")
             ->where_in('from_location',$fromIds)
             ->where_in('to_location',$toIds);
-           
+  
+        if($date != null)
+        {
+            $this->db->where('date_time_of_departure >',$date);
+        }
+        else
+        {
+            $this->db->where('date_time_of_departure >','CURRENT DATE');
+        }
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -125,5 +138,6 @@ class SearchModel extends CI_Model {
             return null;
         }
     }
+    
 }
 ?>

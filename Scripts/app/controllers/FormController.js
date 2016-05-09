@@ -52,7 +52,7 @@
         
         $scope.registerTheRequest = function(fromPlace,toPlace,datePreferred,weight)
         {
-            console.log("register travel");
+            console.log("register request");
             var fromPlace = extractAddressComponents(fromPlace);
             var toPlace = extractAddressComponents(toPlace);
             //var dateString = getDateInSQLformat(datePreferred);
