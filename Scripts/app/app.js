@@ -1,10 +1,18 @@
-var AddMyBag = angular.module("AddMyBag", ['ngRoute','AuthModule','AppConstantsModule','ngMaterial','ngMessages','google.places']);
+var AddMyBag = angular.module("AddMyBag", ['ngRoute'
+                                            ,'AuthModule'
+                                            ,'AppConstantsModule'
+                                            ,'ngMaterial'
+                                            ,'ngMessages'
+                                            ,'google.places'
+                                            ]);
 (function(){
-    AddMyBag.run(function($rootScope)
+    AddMyBag.run(function($rootScope,$templateCache, $http)
     {
         $rootScope.$on("event:LoginModuleLoaded", function (event){
            AddMyBag.$inject = ['AuthModule'] ;
         });
+        $http.get('index.php/Welcome/LoginPartial', {cache:$templateCache});
+        
         
     });
     /*
