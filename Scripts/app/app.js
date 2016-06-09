@@ -4,6 +4,7 @@ var AddMyBag = angular.module("AddMyBag", ['ngRoute'
                                             ,'ngMaterial'
                                             ,'ngMessages'
                                             ,'google.places'
+                                            ,'ContentProvider'
                                             ]);
 (function(){
     AddMyBag.run(function($rootScope,$templateCache, $http)
@@ -12,7 +13,7 @@ var AddMyBag = angular.module("AddMyBag", ['ngRoute'
            AddMyBag.$inject = ['AuthModule'] ;
         });
         $http.get('index.php/Welcome/LoginPartial', {cache:$templateCache});
-        
+        $http.get('index.php/Welcome/addRequestPartial', {cache:$templateCache});
         
     });
     /*

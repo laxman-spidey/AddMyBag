@@ -13,14 +13,14 @@
             </span>
             <span layout="row" layout-align="center center" ng-controller='AuthController'>
                 
-                <md-button ng-click="showTabDialog($event)" aria-label="login" class="md-primary" >Log in</md-button> 
+                <md-button ng-click="showLoginDialog($event)" ng-click="trasactRequest(null,$event)" aria-label="login" class="md-primary" >Log in</md-button> 
                 
                 <span id="googleSignIn"  style="width:200px">
                     <span id="signInButton"></span>
                   </span>
                 <google-plus-signin autorender="false" buttontype='icon' clientid="998646554798-0f6ppidamm9aqqo9esu73nv0f9lbbhg8.apps.googleusercontent.com" />
-                <md-button style="width:24px;height:24px"  layout="column"  class="fb-login-button md-icon-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1"  ng-click="fbLogin()" layout-align="center" >
-                    <img src="img/fb.png"   aria-label="facebook" style="width:24px;height:24p;margin-right:10px"></img>
+                <md-button style="margin-right:10px;" class="fb-login-button md-icon-button" scope="public_profile,email,user_friends" show-faces="true" max-rows="1"  ng-click="fbLogin()" layout-align="center" >
+                    <img src="img/fb.png"   aria-label="facebook" style="width:24px;height:24p;"></img>
                 </md-button>
             </span>
         </md-toolbar>
@@ -31,11 +31,11 @@
             <div class="stats" >
                 <h1></h1>
             </div>
-            <div class="container" >
+            <div  flex-order="100" >
                 <div>
                     <span layout-margin class="md-primary">Find a traveller</span> 
                 </div>
-                <form class="inputIcons" no-validate name="searchForm" layout="row" layout-align="center center">
+                <form class="inputIcons" no-validate name="searchForm" layout="row" layout-xs="column"  layout-align="center center">
                        
                     <md-input-container>
                         <md-icon class="material-icons" >location_on</md-icon>
@@ -58,7 +58,7 @@
                     
                     <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
                 </form>
-                <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp" layout-padding layout-margin layout="column">
+                <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp"  layout-padding layout-margin layout="column">
                     <div  layout="row" layout-margin  flex>
                             <div layout layout-align="center center">
                                 <md-icon  class="material-icons">location_on</md-icon>
@@ -92,7 +92,7 @@
                     </div>  
                     <div class="container" layout="row"  >
                         
-                        <md-button class="md-primary md-raised" flex-end="20">request </md-button>
+                        <md-button class="md-primary md-raised" ng-click="trasactRequest(item,$eve)" flex-end="20">request </md-button>
                     </div>
                 </md-whiteframe>
             </div>
@@ -168,6 +168,7 @@
     <script type="text/javascript" src="Scripts/app/AppConstantsModule.js"></script>
     <script type="text/javascript" src="Scripts/app/AuthorizationModule.js"></script>
     <script type="text/javascript" src="Scripts/app/google-plus-signin.js"></script>
+    <script type="text/javascript" src="Scripts/app/ContentProvider.js"></script>
     <script type="text/javascript" src="Scripts/app/services/testService.js"></script>
     
     

@@ -1,6 +1,6 @@
 "use strict";
 (function () {
-    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog, $http, FbAuthService) {
+    var testController = function ($scope, $rootScope,$timeout,testService,$mdDialog, $http, FbAuthService, ContentProviderService) {
         var base_url = window.location.origin;
         
         $scope.dateOfArrival = new Date();
@@ -19,7 +19,8 @@
                 $mdDialog.cancel();
         }
         
-        $scope.showTabDialog = function(ev) {
+        $scope.showLoginDialog = function(ev) {
+            Content
             $mdDialog.show({
                 controller: DialogController,
                 templateUrl: 'index.php/Welcome/LoginPartial', 
@@ -106,9 +107,30 @@
                 
             }
         }
+        $scope.trasactRequest = function(travel,event)
+        {
+            
+            $mdDialog.show({
+                locals: travel,
+                controller: DialogController,
+                templateUrl: 'index.php/Welcome/addRequestPartial', 
+                parent: angular.element(document.body),
+                targetEvent: event, 
+                onComplete: onShowDialog,
+                clickOutsideToClose:true
+            }).then(function(answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function() {
+                    $scope.status = 'You cancelled the dialog.';
+            });
+        }
+        
     };
 
     function DialogController($scope, $mdDialog) {
+        
+        
+        
         $scope.hide = function() {
             $mdDialog.hide();
         };
@@ -119,8 +141,9 @@
             $mdDialog.hide(answer);
         };
     }
+    
 
-    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http","FbAuthService"];
+    testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http","FbAuthService","ContentProviderService"];
     AddMyBag.controller("testController",testController);
     
     

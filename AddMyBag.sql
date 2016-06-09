@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `google_id` varchar(100) NOT NULL,
   `facebook_id` varchar(100) NOT NULL,
   `alternate_phone` int(11) NOT NULL,
-  `user_created_TS` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `user_created_TS` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `avg_rating` DECIMAL( 2, 1 )
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -160,3 +161,46 @@ CREATE TABLE IF NOT EXISTS `link` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+BEGIN
+	DECLARE ratingAvg int DEFAULT 0;
+	DECLARE insertId int;
+	DECLARE sqlQuery varchar(500);
+	DECLARE column varchar(30);
+	DECLARE compareCol varchar(30);
+	DECLARE table varchar(30);
+	INSERT INTO review (`rating`,`review_txt`) VALUES (5,'text');
+	SET insertId = LAST_INSERT_ID();
+	IF onType = `T` THEN
+		SET column =` review_on_post_id `;
+		SET table = ` travel_post `;
+		SET compareCol = `post_id`;
+	ELSE
+		SET column = ` review_on_add_id `;
+		SET table = `add_request`;
+		SET compareCol = `add_id`
+	END IF;
+
+	SET sqlQuery = `UPDATE link SET ` + column + `insertId where link_id = linkId;`;
+	
+	EXECUTE sqlQuery;
+	
+	
+	SET sqlQuery = `SELECT AVG(rating) INTO ratingAvg from rating WHERE review_id IN ` +
+					`( ` +
+						`select ` + column +` from link where ` + compareCol + ` IN ` +
+						`( ` +
+							`(select ` +compareCol + ` from ` + table + ` where user_id = `+ userId +
+						`) ` +
+					`)`
+					;
+	EXECUTE sqlQuery;
+
+	UPDATE user SET avg_rating = ratingAvg where user_id = userId;
+END
+
+
+select AVG(rating) review from review where review_id IN
+(select review_on_post_id from link where post_id IN
+(select post_id from travel_post where user_id = 1))

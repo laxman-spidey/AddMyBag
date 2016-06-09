@@ -46,8 +46,6 @@
                               ;
             console.log(date.getTimezoneOffset());
             return finalString;
-            
-            
         };
         
         $scope.registerTheRequest = function(fromPlace,toPlace,datePreferred,weight)
@@ -75,7 +73,7 @@
             var toPlace = extractAddressComponents($scope.toPlace);
             var dateString = getDateInSQLformat($scope.dateOfArrival);
             var request = {
-                from        : fromPlace,
+                from        : fromPlace, 
                 to          : toPlace,
                 arrivalDate : dateString,
                 weight      : $scope.weight,

@@ -3,6 +3,8 @@
     
     //Definition for Transaction Controller
     var TransactionController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
+        
+        angular.extend({},DialogController,TransactionController);
         this.request(requestItem)
         {
             
@@ -18,12 +20,53 @@
     AddMyBag.controller("TransactionController(",TransactionController);
 
 
+    var Transaction = function()
+    {
+        var factory = {}
+        factory.travelData = {};
+        factory.requestData = {};
+        factory.TYPE_TRAVEL = "TRAVEL";
+        factory.TYPE_REQUEST = "REQUEST";
+        factory.transactionType = "";
+        
+        factory.populateTravel()
+        {
+            //factory.   
+        }
+    }
     /*************************************************************************
      * 
      * Application Authentication Service.
      * This connects to the AddMyBag Application server.
      *
      * ***********************************************************************/
+     var TransactionService = function($http)
+     {
+         var factory = {};
+        factory.insertTravelPost = function(request) {
+            $http.post("index.php/Welcome/registerTheTravel", request)
+                .success(function(data, status, headers, config) {
+                    console.log("Travel registered");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("failure");
+                });
+        }
+        factory.insertAddRequest = function(request) {
+            $http.post("index.php/Welcome/registerTheRequest", request)
+                .success(function(data, status, headers, config) {
+                    console.log("request registerd");
+                    console.log(data);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("failure");
+                });
+        }
+        return factory;
+     }
+     
+     
     var AuthService = function($http, User) {
         var factory = {};
 

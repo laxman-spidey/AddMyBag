@@ -21,6 +21,11 @@ var AppConstantsModule = angular.module("AppConstantsModule",[]);
         constants.REQUEST_CODES = {
             
         };
+        
+        constants.CONTROLLER_CODES = {
+            TestController : 501
+            
+        }
     }
     AppConstantsModule.service("constants",constants);    
     AppConstantsModule.config(function ($provide) {

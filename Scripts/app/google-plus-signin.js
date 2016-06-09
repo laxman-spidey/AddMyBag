@@ -72,21 +72,24 @@ AuthModule.
                   if(defaults.buttontype === 'icon')
                   {
                     console.log('icon');
-                    buttonInnerHTML = '<md-button style="width:24px;height:24px" layout="column" layout-align="center" class="md-icon-button" style="" aria-label="Google" > '+
+                    buttonInnerHTML = '<md-button id="icon"  layout="column" layout-align="center" class="md-icon-button" style="" aria-label="Google" > '+
                     '  <img src="img/gplus.png" style="width:24px;height:24p" ></img>'+
-                    '</md-button>'
+                    '</md-button>';
+                    defaults.customtargetid = 'icon';
                   }
                   else if(defaults.buttontype === 'text')
                   { 
                     console.log('text');
-                    buttonInnerHTML = '<md-button style="background-color:#d34836;width:250px;height:40px" class=" md-raised" >'+
+                    buttonInnerHTML = '<md-button id="button" style="background-color:#d34836;width:250px;height:40px" class=" md-raised" >'+
                     '<div layout="row" layout-align="center center">'+
                     '    <img src="img/gplus.png"  aria-label="facebook" style="width:24px;height:24p;margin-right:10px" ></img>'+
                     '    <span style="color:#FFFFFF" class="tolowercase">sign in with Google</span>'+
                     '  </div>'+
                     '</md-button>';
+                    defaults.customtargetid= 'button';
                   }
                   var mdButton = $compile(buttonInnerHTML)(scope);
+                  console.log(mdButton);
                   angular.element(element[0]).append(mdButton);
                   
               }
@@ -101,9 +104,12 @@ AuthModule.
 
               // Some default values, based on prior versions of this directive
               function onSignIn(authResult) {
+                  console.log("event:google-plus-signin-success");
                   $rootScope.$broadcast('event:google-plus-signin-success', authResult);
               };
-              function onSignInFailure() {
+              function onSignInFailure(error) {
+                  console.log("event:google-plus-signin-failure: ");
+                  console.log(error);
                   $rootScope.$broadcast('event:google-plus-signin-failure', null);
               };
 
@@ -134,6 +140,7 @@ AuthModule.
                           } else {
                             console.log("not autorendering");
                               googleAuthObj.attachClickHandler(defaults.customtargetid, {}, defaults.onsuccess, defaults.onfailure);
+                              
                           }
                       });
                   };

@@ -13,11 +13,11 @@
       <md-tabs md-disable-animation md-dynamic-height md-stretch-tabs="always" md-border-bottom>
         <md-tab label="login">
           <md-content layout-margin>
-            <form no-validate name="userForm" class="no-margin" flex>
+            <form no-validate name="userForm" class="no-margin" ng-submit="testToast()" flex>
               <md-input-container class="md-icon-float md-block">
                 <md-icon class="material-icons inputIcon email">email</md-icon>
                 <label> Email </label>
-                <input type="text" name="email" ng-model="email" required /> 
+                <input type="text" name="email" ng-model="email" required  /> 
                 <div ng-messages="userForm.email.$error" ng-show="userForm.email.$dirty">
                   <div ng-message="required">Enter your EmailID</div>
                 </div>
@@ -35,7 +35,8 @@
               </md-input-container>
               <div layout="row" layout-align="end" class="no-margin">
                 <md-input-container class="md-block no-margin">
-                  <md-button class="md-primary md-raised" >Login</md-button>
+                 
+                  <md-button type="submit" class="md-primary md-raised"  >Login</md-button>
                 </md-input-container>
               </div>
               ______________________________

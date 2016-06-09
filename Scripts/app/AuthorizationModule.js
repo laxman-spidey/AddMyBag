@@ -1,9 +1,12 @@
 "use strict";
-var AuthModule = angular.module("AuthModule", ['ngRoute']);
+var AuthModule = angular.module("AuthModule", [
+                                                'ngRoute'
+                                                ,'ContentProvider'
+                                            ]);
 (function () {
     
     //Definition for Authorization Controller
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog, $mdToast, ContentProviderService){
         console.log("entered controller");
         var RESPONSE_CODE = {
             // login response codes
@@ -20,8 +23,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         
         $scope.fbLogin = function()
         {
-            console.log("dhflakhfjdkaskh")
-            FbAuthService.login();   
+            FbAuthService.login(onResponseRecieved);   
         }
         //GplusAuthService.initialize();
         $scope.cancel = function()
@@ -36,7 +38,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             
         };
         
-        this.login = function(email,password)
+        $scope.login = function(email,password)
         {
             UserService.appLogin(email, password, RESPONSE_CODE, onResponseRecieved);
         };
@@ -55,22 +57,43 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             };
             //UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
             
-        });        
+        });
+        $scope.$on("event:google-plus-signin-failure", function(event, authResponse) {
+            console.log("login failed");
+            //UserService.login(response,response.authResponse.accessToken,UserService.LOGIN_VIA_FB);
+            
+        });       
+        
         var onResponseRecieved = function(response, responseCode)
         {
             if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
             {
-                UserService.userId = response.userId;
+                UserService.userId = response.userIdpoouyttr̥eq
                 //$scope.$broadcast('onSuccessfulLogin');
                 console.log("success :"+ responseCode);
+                showSimpleToast("you are logged in");
             }
             else
             {
                 //$scope.$broadcast('onFailure',{responseCode: responseCode});
                 console.log("failed: " + responseCode);
+                showSimpleToast("login failed");
             }
+            
         };
-
+        $scope.testToast = function()
+        {
+            showSimpleToast('text');
+        }
+        var showSimpleToast = function(text)
+        {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(text)
+                    .position('fit')
+                    .hideDelay(5000)
+            );
+        }
         var registerSwitchForms = function()
         {
             $('.toggle').click(function(){
@@ -86,7 +109,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
             });
         };
     }; 
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"]
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog","$mdToast","ContentProviderService"];
     AuthModule.controller("AuthController",AuthController);
 
 
@@ -136,7 +159,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
      *
      * ***********************************************************************/
      
-    var FbAuthService = function(UserService, $window)
+    var FbAuthService = function(UserService, $window, constants, $q)
     {
         var factory = {};
         
@@ -193,29 +216,44 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
                 }
             });
         };
-        factory.login = function()
+        factory.login = function(onResponseRecieved)
         {
             console.log("fb login")
-            var fbObject = FB.login(factory.getUserInfo())
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    onConnected(response);
+                } else {
+                    var connection = FB.login(onConnected);
+                }
+            });
+            var onConnected = function(response)    
+            {
+                console.log("on connected");
+                if(response.status === 'connected')
+                {
+                    console.log("status success");
+                    factory.getUserInfo().then(function(fbObject)
+                    {
+                        console.log("promise returned");
+                        UserService.socialLogin(fbObject.email, fbObject.first_name, fbObject.last_name, accessToken, fbObject.id, user.LOGIN_VIA_FB, constants.AUTH_RESPONSE_CODES, onResponseRecieved)
+                    });
+                }
+            }
         }
         factory.getUserInfo = function(){
             var userid;
-            FB.api('/me', 'get', {fields: 'id,name,gender,email' }, function(response) {
-                console.log(response);
-                userid = response.id;
-                console.log(userid);
-                return response;
-                /* copied from source
-                $rootScope.$apply(function() {
-                    $rootScope.user = _self.user = res;
-                });
-                */
+            var deferred = $q.defer();
+            FB.api('/me', 'get', {fields: 'id,email,first_name,last_name,gender' }, function(response) {
+                //console.log(response);
+                deferred.resolve(response);
             });
             
-            
+            /*
             FB.api('/me/permissions', function(response) {
                 console.log(response);
             });
+            */
+            return deferred.promise;
             
         };
         
@@ -233,7 +271,7 @@ var AuthModule = angular.module("AuthModule", ['ngRoute']);
         return factory;
     };
     
-    FbAuthService.$inject = ["UserService","$window"];
+    FbAuthService.$inject = ["UserService","$window","constants","$q"];
     AuthModule.service("FbAuthService",FbAuthService);
 
 
