@@ -13,6 +13,7 @@
             $scope.testVar = response.testString;
             console.log(response);
         });
+        
         $scope.cancel = function()
         {
                 console.log("coming into close");
@@ -20,9 +21,9 @@
         }
         
         $scope.showLoginDialog = function(ev) {
-            Content
+            
             $mdDialog.show({
-                controller: DialogController,
+                controller: DialogAuthController,
                 templateUrl: 'index.php/Welcome/LoginPartial', 
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -112,8 +113,8 @@
             
             $mdDialog.show({
                 locals: travel,
-                controller: DialogController,
-                templateUrl: 'index.php/Welcome/addRequestPartial', 
+                controller: DialogAuthController,
+                templateUrl: 'index.php/Welcome/AddRequestPartial', 
                 parent: angular.element(document.body),
                 targetEvent: event, 
                 onComplete: onShowDialog,
@@ -125,11 +126,17 @@
             });
         }
         
+        $scope.$on("onLoginSuccess",function(event, args) {
+             var response  = args.response;
+             
+        });
+        
+        
     };
 
-    function DialogController($scope, $mdDialog) {
+    function DialogAuthController($scope, $mdDialog, $controller) {
         
-        
+        $controller("AuthController",{$scope, $scope});
         
         $scope.hide = function() {
             $mdDialog.hide();
@@ -141,7 +148,8 @@
             $mdDialog.hide(answer);
         };
     }
-    
+    DialogAuthController.$inject = ["$scope", "$mdDialog", "$controller" ];
+    AddMyBag.controller("DialogAuthController",DialogAuthController);
 
     testController.$inject = ["$scope","$rootScope","$timeout","testService","$mdDialog","$http","FbAuthService","ContentProviderService"];
     AddMyBag.controller("testController",testController);

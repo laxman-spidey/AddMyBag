@@ -2,9 +2,10 @@
 (function () {
     
     //Definition for Transaction Controller
-    var TransactionController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ){
+    var TransactionController = function($scope) {
+    //, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog ) {
         
-        angular.extend({},DialogController,TransactionController);
+        //angular.extend({},DialogController,TransactionController);
         this.request(requestItem)
         {
             
@@ -16,8 +17,9 @@
         }
         
     }; 
-    TransactionController$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"];
-    AddMyBag.controller("TransactionController(",TransactionController);
+    TransactionController.$inject = ["$scope"];
+    //,"AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog"];
+    AddMyBag.controller("TransactionController",TransactionController);
 
 
     var Transaction = function()

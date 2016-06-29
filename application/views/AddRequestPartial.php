@@ -1,4 +1,4 @@
-<md-dialog ng-controller="TransactionController" aria-label="Mango (Fruit)">
+<md-dialog  aria-label="Mango (Fruit)">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>Few more details</h2>

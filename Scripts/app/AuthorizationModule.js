@@ -6,8 +6,17 @@ var AuthModule = angular.module("AuthModule", [
 (function () {
     
     //Definition for Authorization Controller
-    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdDialog, $mdToast, ContentProviderService){
+    var AuthController = function($scope, AuthService, $rootScope, $window, FbAuthService, GplusAuthService, UserService, $mdToast, ContentProviderService){
         console.log("entered controller");
+        
+        
+        var requestedController = ContentProviderService.getLoginRequestor();
+        if(requestedController == 0)
+        {
+            console.error("Set the controller request code in the content provider");
+        }
+        
+        
         var RESPONSE_CODE = {
             // login response codes
             LOGIN_SUCCESS : 100,
@@ -26,11 +35,7 @@ var AuthModule = angular.module("AuthModule", [
             FbAuthService.login(onResponseRecieved);   
         }
         //GplusAuthService.initialize();
-        $scope.cancel = function()
-        {
-            console.log("close function");
-            $mdDialog.cancel();
-        }
+    
         $scope.register = function(email,password,firstName,lastName,phoneNumber)
         {
             console.log('register');
@@ -68,15 +73,16 @@ var AuthModule = angular.module("AuthModule", [
         {
             if(responseCode == RESPONSE_CODE.LOGIN_SUCCESS || responseCode == RESPONSE_CODE.REGISTER_SUCCESS)
             {
-                UserService.userId = response.userIdpoouyttr̥eq
-                //$scope.$broadcast('onSuccessfulLogin');
+                UserService.userId = response.userId;
+                $rootScope.$broadcast('onLoginSuccess',{response : response, requestCode : requestedController});
                 console.log("success :"+ responseCode);
                 showSimpleToast("you are logged in");
             }
             else
             {
-                //$scope.$broadcast('onFailure',{responseCode: responseCode});
+                $rootScope.$broadcast('onloginFailed',{requestCode : requestedController});
                 console.log("failed: " + responseCode);
+                
                 showSimpleToast("login failed");
             }
             
@@ -109,7 +115,7 @@ var AuthModule = angular.module("AuthModule", [
             });
         };
     }; 
-    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdDialog","$mdToast","ContentProviderService"];
+    AuthController.$inject = ["$scope","AuthService","$rootScope",'$window','FbAuthService','GplusAuthService','UserService',"$mdToast","ContentProviderService"];
     AuthModule.controller("AuthController",AuthController);
 
 
@@ -427,7 +433,7 @@ var AuthModule = angular.module("AuthModule", [
         {
             console.log(request);
             $http.post("index.php/Welcome/register", request).success(function(data, status, headers, config) {
-                
+                console.log(headers);
                 callback(data, data.responseCode);
             });
         };

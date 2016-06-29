@@ -5,6 +5,7 @@ var ContentProviderModule = angular.module("ContentProvider",[]);
     var ContentProviderService = function () {
         var provider = {};
         provider.data = {};
+        provider.data['LOGIN_REQUESTOR'] = 0;
         provider.addData = function(key, value)
         {
             provider.data[key] = value;    
@@ -21,6 +22,7 @@ var ContentProviderModule = angular.module("ContentProvider",[]);
         {
             return provider.data['LOGIN_REQUESTOR'];
         }
+        return provider;
     }
     
     

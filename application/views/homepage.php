@@ -35,7 +35,7 @@
                 <div>
                     <span layout-margin class="md-primary">Find a traveller</span> 
                 </div>
-                <form class="inputIcons" no-validate name="searchForm" layout="row" layout-xs="column"  layout-align="center center">
+                <form class="inputIcons" ng-submit="searchTravels()" no-validate name="searchForm" layout="row" layout-xs="column"  layout-align="center center">
                        
                     <md-input-container>
                         <md-icon class="material-icons" >location_on</md-icon>
@@ -56,7 +56,7 @@
                     
                     
                     
-                    <md-button  class="md-primary md-raised" ng-click='searchTravels()'  >Search</md-button>    
+                    <md-button  class="md-primary md-raised" type="submit"  >Search</md-button>    
                 </form>
                 <md-whiteframe ng-repeat="item in TravelsResult.data" class="md-whiteframe-4dp"  layout-padding layout-margin layout="column">
                     <div  layout="row" layout-margin  flex>
@@ -92,7 +92,7 @@
                     </div>  
                     <div class="container" layout="row"  >
                         
-                        <md-button class="md-primary md-raised" ng-click="trasactRequest(item,$eve)" flex-end="20">request </md-button>
+                        <md-button class="md-primary md-raised" ng-click="trasactRequest(item,$event)" flex-end="20">request </md-button>
                     </div>
                 </md-whiteframe>
             </div>
