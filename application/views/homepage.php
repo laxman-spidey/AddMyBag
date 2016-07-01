@@ -35,13 +35,13 @@
                 <div>
                     <span layout-margin class="md-primary">Find a traveller</span> 
                 </div>
-                <form class="inputIcons" ng-submit="searchTravels()" no-validate name="searchForm" layout="row" layout-xs="column"  layout-align="center center">
+                <form class="inputIcons" ng-submit="searchTravels()" novalidate name="searchForm" layout="row" layout-xs="column"  layout-align="center center">
                        
                     <md-input-container>
                         <md-icon class="material-icons" >location_on</md-icon>
                         <label>from</label>
                         <input type="text" g-places-autocomplete name="fromPlace" ng-model="fromPlace" required />
-                        <div ng-messages="searchForm.fromPlace.$error" ng-show="searchForm.fromPlace.$dirty">
+                        <div ng-messages="searchForm.fromPlace.$error" >
                             <div ng-message="required">This is required!</div>
                         </div>
                     </md-input-container>
@@ -49,7 +49,7 @@
                         <md-icon class="material-icons" >location_on</md-icon>
                         <label>to</label>
                         <input type="text" g-places-autocomplete name="toPlace" ng-model="toPlace" required />
-                        <div ng-messages="searchForm.toPlace.$error" ng-show="searchForm.toPlace.$dirty">
+                        <div ng-messages="searchForm.toPlace.$error" >
                             <div ng-message="required">This is required!</div>
                         </div>
                     </md-input-container>
